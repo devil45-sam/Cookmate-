@@ -1,0 +1,7 @@
+{
+  "name": "cookmate-india",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CookMate India - ingredient-based Indian recipe generator with audio cooking assistant, powered by Gemini.",
+  "dependencies": {}
+}
