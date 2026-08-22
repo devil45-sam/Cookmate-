@@ -12,10 +12,9 @@
 // }
 //
 // Generates one complete Indian recipe using Google Gemini.
-// Payment has been completely removed.
 //
-// Required Vercel Environment Variable:
-//   GEMINI_API_KEY
+// Required Vercel environment variable:
+// GEMINI_API_KEY
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -30,119 +29,6 @@ const LANGUAGE_NAMES = {
   ta: "Tamil"
 };
 
-const RECIPE_SCHEMA = {
-  type: "object",
-  properties: {
-    recipeName: {
-      type: "string",
-      description: "The name of the recipe."
-    },
-    stateCuisine: {
-      type: "string",
-      description: "The Indian state or regional cuisine."
-    },
-    mealType: {
-      type: "string",
-      description: "The type of meal."
-    },
-    difficulty: {
-      type: "string",
-      enum: ["Beginner", "Intermediate", "Expert"],
-      description: "Recipe difficulty."
-    },
-    preparationTime: {
-      type: "string",
-      description: "Preparation time, for example 10 minutes."
-    },
-    cookingTime: {
-      type: "string",
-      description: "Cooking time, for example 20 minutes."
-    },
-    totalTime: {
-      type: "string",
-      description: "Total preparation and cooking time."
-    },
-    servings: {
-      type: "string",
-      description: "Serving size, for example 2 people."
-    },
-    estimatedCost: {
-      type: "string",
-      description: "Estimated cost in Indian rupees."
-    },
-    calories: {
-      type: "string",
-      description: "Estimated calories per serving."
-    },
-    ingredients: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          name: {
-            type: "string"
-          },
-          quantity: {
-            type: "string"
-          }
-        },
-        required: ["name", "quantity"]
-      }
-    },
-    equipment: {
-      type: "array",
-      items: {
-        type: "string"
-      }
-    },
-    instructions: {
-      type: "array",
-      items: {
-        type: "string"
-      }
-    },
-    nutritionInfo: {
-      type: "string"
-    },
-    storageTips: {
-      type: "string"
-    },
-    reheatingInstructions: {
-      type: "string"
-    },
-    ingredientAlternatives: {
-      type: "string"
-    },
-    cookingTips: {
-      type: "string"
-    },
-    commonMistakes: {
-      type: "string"
-    }
-  },
-  required: [
-    "recipeName",
-    "stateCuisine",
-    "mealType",
-    "difficulty",
-    "preparationTime",
-    "cookingTime",
-    "totalTime",
-    "servings",
-    "estimatedCost",
-    "calories",
-    "ingredients",
-    "equipment",
-    "instructions",
-    "nutritionInfo",
-    "storageTips",
-    "reheatingInstructions",
-    "ingredientAlternatives",
-    "cookingTips",
-    "commonMistakes"
-  ]
-};
-
 function buildPrompt({
   name,
   language,
@@ -153,57 +39,82 @@ function buildPrompt({
 }) {
   const langName = LANGUAGE_NAMES[language] || "English";
 
-  const ingredientList = ingredients.join(", ");
-
-  const dishInstruction = dishHint
+  const dishLine = dishHint
     ? `
-The user specifically wants something like:
+The user specifically wants a dish like:
 "${dishHint}"
 
-Prioritize this dish or the closest realistic Indian recipe.
+Prioritize this dish or the closest realistic match.
 `
     : "";
 
-  return `
-You are CookMate, a professional Indian home-cooking assistant.
+  return `You are a professional Indian home-cooking chef.
 
-Create ONE realistic Indian recipe for the user.
+Generate ONE complete, realistic Indian recipe as STRICT JSON only.
 
-USER:
-Name: ${name}
+Do not use Markdown.
+Do not use code fences.
+Do not add any explanation outside the JSON.
+
+User name: ${name}
 Language: ${langName}
 Meal type: ${meal}
-Indian state/regional cuisine: ${cuisine}
-Available ingredients: ${ingredientList}
-${dishInstruction}
+State / regional cuisine: ${cuisine}
 
-IMPORTANT RULES:
+${dishLine}
 
-1. Generate exactly ONE recipe.
-2. Use the available ingredients wherever realistically possible.
-3. You may add common pantry basics such as salt, cooking oil, water and basic spices when necessary.
-4. Do not invent unusual ingredients unnecessarily.
-5. The recipe must actually be cookable by a beginner.
-6. Give realistic quantities.
-7. Give realistic preparation and cooking times.
-8. Instructions must be numbered through the array.
-9. Every instruction must contain a clear action and useful cooking cue.
-10. Avoid vague instructions such as "cook until done".
-11. Use exact cues such as:
-   - "cook for 5-6 minutes"
-   - "until the onions turn golden brown"
-   - "until the tomatoes become soft"
-12. All user-facing text must be written in ${langName}.
-13. Keep the recipe practical for an Indian home kitchen.
-14. Estimated cost must be in Indian rupees.
-15. Calories and nutrition should be reasonable estimates, not medical advice.
-16. Return only the requested JSON structure.
-17. Do NOT return Markdown.
-18. Do NOT wrap the JSON in code fences.
-19. Do NOT add explanations outside the JSON.
+Available ingredients:
+${ingredients.join(", ")}
 
-The output must match the provided JSON schema exactly.
-`;
+Rules:
+
+- Use the available ingredients wherever realistically possible.
+- You may add common pantry basics such as salt, oil, water and basic spices.
+- Do not add unnecessary or unusual ingredients.
+- The recipe must be practical for a real Indian home kitchen.
+- The recipe must be suitable for a beginner.
+- Give realistic measurements.
+- Give realistic preparation and cooking times.
+- Give clear numbered instructions.
+- Every instruction must contain a useful cooking cue.
+- Avoid vague instructions such as "cook until done".
+- Use cues such as "cook for 5-6 minutes until the onions turn golden brown".
+- Write all recipe text in ${langName}.
+- Estimated cost must be in Indian rupees.
+- Calories should be a reasonable estimate.
+
+Return EXACTLY this JSON structure:
+
+{
+  "recipeName": "string",
+  "stateCuisine": "string",
+  "mealType": "string",
+  "difficulty": "Beginner | Intermediate | Expert",
+  "preparationTime": "string, e.g. 10 minutes",
+  "cookingTime": "string, e.g. 20 minutes",
+  "totalTime": "string",
+  "servings": "string, e.g. 2 people",
+  "estimatedCost": "string, e.g. ₹80",
+  "calories": "string, e.g. 320 kcal per serving",
+  "ingredients": [
+    {
+      "name": "string",
+      "quantity": "string"
+    }
+  ],
+  "equipment": [
+    "string"
+  ],
+  "instructions": [
+    "string"
+  ],
+  "nutritionInfo": "string",
+  "storageTips": "string",
+  "reheatingInstructions": "string",
+  "ingredientAlternatives": "string",
+  "cookingTips": "string",
+  "commonMistakes": "string"
+}`;
 }
 
 async function callGemini(prompt) {
@@ -229,8 +140,7 @@ async function callGemini(prompt) {
         }
       ],
       generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: RECIPE_SCHEMA
+        responseMimeType: "application/json"
       }
     })
   });
@@ -238,21 +148,21 @@ async function callGemini(prompt) {
   const responseText = await response.text();
 
   if (!response.ok) {
-    let errorMessage = responseText;
+    let message = responseText;
 
     try {
       const errorData = JSON.parse(responseText);
 
-      errorMessage =
+      message =
         errorData?.error?.message ||
         errorData?.error?.status ||
         responseText;
     } catch {
-      // Keep original response text if it is not JSON.
+      // Keep original response if it is not JSON.
     }
 
     throw new Error(
-      `Gemini API error (${response.status}): ${errorMessage}`
+      `Gemini API error: HTTP ${response.status} - ${message}`
     );
   }
 
@@ -261,99 +171,66 @@ async function callGemini(prompt) {
   try {
     data = JSON.parse(responseText);
   } catch {
-    throw new Error("Gemini returned an invalid API response.");
+    throw new Error(
+      "Gemini returned an invalid API response."
+    );
   }
 
   const candidate = data?.candidates?.[0];
 
   if (!candidate) {
-    throw new Error("Gemini returned no candidate.");
+    const blockReason =
+      data?.promptFeedback?.blockReason;
+
+    throw new Error(
+      blockReason
+        ? `Gemini blocked the request: ${blockReason}`
+        : "Gemini returned no candidate."
+    );
   }
 
-  if (candidate.finishReason === "SAFETY") {
-    throw new Error("Gemini blocked the recipe request for safety reasons.");
-  }
+  const parts = candidate?.content?.parts || [];
 
-  const text = candidate?.content?.parts
-    ?.map((part) => part?.text || "")
+  const text = parts
+    .map((part) => part?.text || "")
     .join("")
     .trim();
 
   if (!text) {
-    throw new Error("Gemini returned no recipe content.");
+    throw new Error(
+      `Gemini returned no recipe content. Finish reason: ${
+        candidate?.finishReason || "unknown"
+      }`
+    );
   }
 
   try {
     return JSON.parse(text);
   } catch {
-    throw new Error("Gemini returned recipe data that was not valid JSON.");
+    throw new Error(
+      "Gemini returned recipe content that could not be parsed as JSON."
+    );
   }
-}
-
-function validateRecipe(recipe) {
-  if (!recipe || typeof recipe !== "object") {
-    throw new Error("Invalid recipe response.");
-  }
-
-  const requiredFields = [
-    "recipeName",
-    "stateCuisine",
-    "mealType",
-    "difficulty",
-    "preparationTime",
-    "cookingTime",
-    "totalTime",
-    "servings",
-    "estimatedCost",
-    "calories",
-    "ingredients",
-    "equipment",
-    "instructions",
-    "nutritionInfo",
-    "storageTips",
-    "reheatingInstructions",
-    "ingredientAlternatives",
-    "cookingTips",
-    "commonMistakes"
-  ];
-
-  for (const field of requiredFields) {
-    if (
-      recipe[field] === undefined ||
-      recipe[field] === null
-    ) {
-      throw new Error(`Recipe is missing required field: ${field}`);
-    }
-  }
-
-  if (!Array.isArray(recipe.ingredients)) {
-    throw new Error("Recipe ingredients must be an array.");
-  }
-
-  if (!Array.isArray(recipe.instructions)) {
-    throw new Error("Recipe instructions must be an array.");
-  }
-
-  if (!Array.isArray(recipe.equipment)) {
-    throw new Error("Recipe equipment must be an array.");
-  }
-
-  return recipe;
 }
 
 module.exports = async (req, res) => {
-  // CORS
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // CORS for the Android/Capacitor app
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "*"
+  );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, OPTIONS"
   );
+
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
   );
 
-  // Android / browser preflight
+  // Android/browser preflight
   if (req.method === "OPTIONS") {
     return res.status(204).end();
   }
@@ -362,13 +239,11 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
-      error: "Method not allowed. Use POST."
+      error: "Method not allowed."
     });
   }
 
   try {
-    const body = req.body || {};
-
     const {
       name,
       language,
@@ -377,10 +252,10 @@ module.exports = async (req, res) => {
       ingredients,
       cuisine,
       dishHint
-    } = body;
+    } = req.body || {};
 
-    // Validate required fields
-    if (!name || typeof name !== "string") {
+    // Validate request
+    if (!name) {
       return res.status(400).json({
         success: false,
         error: "Name is required."
@@ -390,7 +265,7 @@ module.exports = async (req, res) => {
     if (!language || !LANGUAGE_NAMES[language]) {
       return res.status(400).json({
         success: false,
-        error: "A supported language is required."
+        error: "Valid language is required."
       });
     }
 
@@ -425,18 +300,6 @@ module.exports = async (req, res) => {
       });
     }
 
-    if (!GEMINI_API_KEY) {
-      console.error(
-        "GEMINI_API_KEY is not configured in Vercel."
-      );
-
-      return res.status(500).json({
-        success: false,
-        error:
-          "Recipe generation is not configured. Please check the server environment."
-      });
-    }
-
     const prompt = buildPrompt({
       name,
       language,
@@ -448,218 +311,22 @@ module.exports = async (req, res) => {
 
     const recipe = await callGemini(prompt);
 
-    validateRecipe(recipe);
-
     return res.status(200).json({
       success: true,
       recipe
     });
+
   } catch (error) {
-    console.error("generate-recipe error:", error);
+    console.error(
+      "generate-recipe error:",
+      error
+    );
 
     return res.status(500).json({
       success: false,
       error:
-        "Something went wrong while generating your recipe.",
-      detail:
-        process.env.NODE_ENV === "production"
-          ? "Recipe generation service failed."
-          : error.message
-    });
-  }
-};
-Return JSON in EXACTLY this shape:
-{
-  "recipeName": "string",
-  "stateCuisine": "string",
-  "mealType": "string",
-  "difficulty": "Beginner | Intermediate | Expert",
-  "preparationTime": "string, e.g. '10 minutes'",
-  "cookingTime": "string, e.g. '20 minutes'",
-  "totalTime": "string",
-  "servings": "string, e.g. '2 people'",
-  "estimatedCost": "string, e.g. '₹80'",
-  "calories": "string, e.g. '320 kcal per serving'",
-  "ingredients": [ { "name": "string", "quantity": "string" } ],
-  "equipment": ["string"],
-  "instructions": ["string, one clear step per array item"],
-  "nutritionInfo": "string, brief summary",
-  "storageTips": "string",
-  "reheatingInstructions": "string",
-  "ingredientAlternatives": "string",
-  "cookingTips": "string",
-  "commonMistakes": "string"
-}`;
-}
-
-async function callGemini(prompt) {
-  const res = await fetch(GEMINI_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        responseMimeType: "application/json"
-      }
-    })
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Gemini API error: HTTP ${res.status} - ${errText}`);
-  }
-
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Gemini returned no content.");
-
-  return JSON.parse(text);
-}
-
-module.exports = async (req, res) => {
-  // CORS: required so the Android app (running on a different origin,
-  // typically https://localhost via Capacitor) can call this API.
-  // The website itself is unaffected since same-origin requests don't
-  // need these headers, but including them is harmless either way.
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
-
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
-    return;
-  }
-
-  const { name, language, plan, meal, ingredients, cuisine, dishHint, paymentId } = req.body || {};
-
-  if (!name || !language || !plan || !meal || !ingredients || !ingredients.length || !cuisine || !paymentId) {
-    res.status(400).json({ error: "Missing required fields." });
-    return;
-  }
-
-  if (!GEMINI_API_KEY) {
-    res.status(500).json({
-      error: "Recipe generation is not configured yet. GEMINI_API_KEY is missing from the server."
-    });
-    return;
-  }
-
-  // NOTE: payment verification is not yet wired in (see _payments.js pattern
-  // from the ML Lead Generator project). Once Cashfree keys are added,
-  // insert a verifyPayment(paymentId) check here before generating.
-
-  try {
-    const prompt = buildPrompt({ language, meal, ingredients, cuisine, dishHint });
-    const recipe = await callGemini(prompt);
-
-    res.status(200).json({ success: true, recipe });
-  } catch (err) {
-    console.error("generate-recipe error:", err);
-    res.status(500).json({
-      error: "Something went wrong generating your recipe. Please try again shortly.",
-      detail: err.message
-    });
-  }
-};
-  "stateCuisine": "string",
-  "mealType": "string",
-  "difficulty": "Beginner | Intermediate | Expert",
-  "preparationTime": "string, e.g. '10 minutes'",
-  "cookingTime": "string, e.g. '20 minutes'",
-  "totalTime": "string",
-  "servings": "string, e.g. '2 people'",
-  "estimatedCost": "string, e.g. '₹80'",
-  "calories": "string, e.g. '320 kcal per serving'",
-  "ingredients": [ { "name": "string", "quantity": "string" } ],
-  "equipment": ["string"],
-  "instructions": ["string, one clear step per array item"],
-  "nutritionInfo": "string, brief summary",
-  "storageTips": "string",
-  "reheatingInstructions": "string",
-  "ingredientAlternatives": "string",
-  "cookingTips": "string",
-  "commonMistakes": "string"
-}`;
-}
-
-async function callGemini(prompt) {
-  const res = await fetch(GEMINI_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        responseMimeType: "application/json"
-      }
-    })
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Gemini API error: HTTP ${res.status} - ${errText}`);
-  }
-
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Gemini returned no content.");
-
-  return JSON.parse(text);
-}
-
-module.exports = async (req, res) => {
-  // CORS: required so the Android app (running on a different origin,
-  // typically https://localhost via Capacitor) can call this API.
-  // The website itself is unaffected since same-origin requests don't
-  // need these headers, but including them is harmless either way.
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
-  }
-
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
-    return;
-  }
-
-  const { name, language, plan, meal, ingredients, cuisine, paymentId } = req.body || {};
-
-  if (!name || !language || !plan || !meal || !ingredients || !ingredients.length || !cuisine || !paymentId) {
-    res.status(400).json({ error: "Missing required fields." });
-    return;
-  }
-
-  if (!GEMINI_API_KEY) {
-    res.status(500).json({
-      error: "Recipe generation is not configured yet. GEMINI_API_KEY is missing from the server."
-    });
-    return;
-  }
-
-  // NOTE: payment verification is not yet wired in (see _payments.js pattern
-  // from the ML Lead Generator project). Once Cashfree keys are added,
-  // insert a verifyPayment(paymentId) check here before generating.
-
-  try {
-    const prompt = buildPrompt({ language, meal, ingredients, cuisine });
-    const recipe = await callGemini(prompt);
-
-    res.status(200).json({ success: true, recipe });
-  } catch (err) {
-    console.error("generate-recipe error:", err);
-    res.status(500).json({
-      error: "Something went wrong generating your recipe. Please try again shortly.",
-      detail: err.message
+        "Something went wrong generating your recipe. Please try again shortly.",
+      detail: error.message
     });
   }
 };
