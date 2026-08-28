@@ -1,31 +1,27 @@
 // CookMate India - Cashfree Production Create Order
-// Vercel API route: /api/create-order
+// POST /api/create-order
 
 const APP_ID = process.env.CASHFREE_APP_ID;
 const SECRET_KEY = process.env.CASHFREE_SECRET_KEY;
-
-const CASHFREE_API = "https://api.cashfree.com/pg";
-const CASHFREE_API_VERSION = "2025-01-01";
-const PREMIUM_AMOUNT = 10;
-const RETURN_URL =
-  "https://cookmate-steel.vercel.app/?payment=success&order_id={order_id}";
-
-function json(res, status, data) {
-  return res.status(status).json(data);
-}
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
-    return json(res, 405, { success: false, error: "Method not allowed" });
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed"
+    });
   }
 
   if (!APP_ID || !SECRET_KEY) {
-    return json(res, 500, {
+    return res.status(500).json({
       success: false,
       error: "Cashfree production credentials are not configured."
     });
@@ -33,28 +29,28 @@ module.exports = async (req, res) => {
 
   try {
     const body = req.body || {};
-    const deviceId = String(body.deviceId || "").trim();
+
+    const deviceId = body.deviceId;
 
     if (!deviceId) {
-      return json(res, 400, {
+      return res.status(400).json({
         success: false,
         error: "Missing deviceId."
       });
     }
 
+    // Fixed Premium price
+    const amount = 10;
+
     const customerId =
-      String(body.customerId || "cookmate_" + deviceId).slice(0, 50);
+      body.customerId ||
+      "cookmate_" +
+      Date.now() +
+      "_" +
+      Math.random().toString(36).slice(2, 8);
 
-    const customerPhone = String(
-      body.customerPhone || "9999999999"
-    ).replace(/\D/g, "").slice(-10);
-
-    if (customerPhone.length !== 10) {
-      return json(res, 400, {
-        success: false,
-        error: "A valid 10-digit customer phone number is required."
-      });
-    }
+    const customerPhone =
+      body.customerPhone || "9999999999";
 
     const orderId =
       "cookmate_" +
@@ -62,65 +58,83 @@ module.exports = async (req, res) => {
       "_" +
       Math.random().toString(36).slice(2, 8);
 
-    const requestId =
-      "cookmate-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+    const response = await fetch(
+      "https://api.cashfree.com/pg/orders",
+      {
+        method: "POST",
 
-    const response = await fetch(`${CASHFREE_API}/orders`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "x-client-id": APP_ID,
-        "x-client-secret": SECRET_KEY,
-        "x-api-version": CASHFREE_API_VERSION,
-        "x-request-id": requestId
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-        order_amount: PREMIUM_AMOUNT,
-        order_currency: "INR",
-        customer_details: {
-          customer_id: customerId,
-          customer_phone: customerPhone
+        headers: {
+          "Content-Type": "application/json",
+          "x-client-id": APP_ID,
+          "x-client-secret": SECRET_KEY,
+          "x-api-version": "2025-01-01"
         },
-        order_meta: {
-          return_url: RETURN_URL
-        },
-        order_tags: {
-          deviceId: deviceId,
-          product: "CookMate Premium"
-        },
-        order_note: "CookMate Premium"
-      })
-    });
 
-    const data = await response.json().catch(() => ({}));
+        body: JSON.stringify({
+          order_id: orderId,
+
+          order_amount: amount,
+
+          order_currency: "INR",
+
+          customer_details: {
+            customer_id: customerId,
+            customer_phone: customerPhone
+          },
+
+          // IMPORTANT:
+          // Used later by verify-payment.js
+          // to identify the CookMate device.
+          order_tags: {
+            deviceId: deviceId
+          },
+
+          order_meta: {
+            return_url:
+              "https://cookmate-steel.vercel.app/?payment=success&order_id={order_id}"
+          },
+
+          order_note: "CookMate Premium"
+        })
+      }
+    );
+
+    const data = await response.json();
 
     if (!response.ok) {
-      console.error("Cashfree create-order error:", data);
-      return json(res, response.status, {
+      console.error("Cashfree error:", data);
+
+      return res.status(response.status).json({
         success: false,
-        error: data.message || "Cashfree order creation failed.",
+        error:
+          data.message ||
+          "Cashfree order creation failed.",
         details: data
       });
     }
 
-    if (!data.order_id || !data.payment_session_id) {
-      console.error("Unexpected Cashfree response:", data);
-      return json(res, 502, {
+    if (!data.payment_session_id) {
+      console.error(
+        "Cashfree response missing payment_session_id:",
+        data
+      );
+
+      return res.status(500).json({
         success: false,
         error: "Cashfree did not return a payment session."
       });
     }
 
-    return json(res, 200, {
+    return res.status(200).json({
       success: true,
       orderId: data.order_id,
       paymentSessionId: data.payment_session_id
     });
+
   } catch (error) {
     console.error("Create order error:", error);
-    return json(res, 500, {
+
+    return res.status(500).json({
       success: false,
       error: "Unable to create payment order."
     });
