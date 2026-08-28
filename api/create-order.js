@@ -30,12 +30,22 @@ module.exports = async (req, res) => {
   try {
     const body = req.body || {};
 
-    // Fixed Premium price
+    const deviceId = body.deviceId;
+
+    if (!deviceId) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing deviceId."
+      });
+    }
+
+    // CookMate Premium price
     const amount = 10;
 
     const customerId =
-      body.customerId ||
-      "cookmate_" + Date.now() + "_" +
+      "cookmate_" +
+      Date.now() +
+      "_" +
       Math.random().toString(36).slice(2, 8);
 
     const customerPhone =
@@ -51,12 +61,14 @@ module.exports = async (req, res) => {
       "https://api.cashfree.com/pg/orders",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "x-client-id": APP_ID,
           "x-client-secret": SECRET_KEY,
           "x-api-version": "2025-01-01"
         },
+
         body: JSON.stringify({
           order_id: orderId,
           order_amount: amount,
@@ -72,7 +84,11 @@ module.exports = async (req, res) => {
               "https://cookmate-steel.vercel.app/?payment=success&order_id={order_id}"
           },
 
-          order_note: "CookMate Premium"
+          order_tags: {
+            deviceId: deviceId
+          },
+
+          order_note: "CookMate Premium ₹10"
         })
       }
     );
@@ -84,8 +100,9 @@ module.exports = async (req, res) => {
 
       return res.status(response.status).json({
         success: false,
-        error: data.message || "Cashfree order creation failed",
-        details: data
+        error:
+          data.message ||
+          "Cashfree order creation failed."
       });
     }
 
