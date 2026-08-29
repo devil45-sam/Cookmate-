@@ -1,0 +1,1634 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}.reveal-on-scroll{opacity:0;transform:translateY(28px);transition:opacity 0.6s cubic-bezier(.2,.8,.2,1),transform 0.6s cubic-bezier(.2,.8,.2,1);}.reveal-on-scroll.revealed{opacity:1;transform:translateY(0);}button,.price-btn,#reviewBtn{transition:transform 0.15s ease,box-shadow 0.15s ease;}button:active,.price-btn:active,#reviewBtn:active{transform:scale(0.96);}</style><script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={theme:{extend:{"colors":{"on-secondary-fixed-variant":"#005312","on-secondary-container":"#217128","outline-variant":"#dbc2b0","surface-container-highest":"#e4e2e1","surface-container":"#f0eded","tertiary-fixed":"#e4e3db","primary-fixed-dim":"#ffb77a","tertiary-container":"#b3b2ab","background":"#fbf9f8","primary-container":"#ff9933","secondary":"#1b6d24","on-primary-fixed":"#2e1500","inverse-on-surface":"#f3f0f0","on-secondary-fixed":"#002204","on-surface":"#1b1c1c","on-error":"#ffffff","surface-container-lowest":"#ffffff","secondary-container":"#a0f399","on-tertiary-fixed-variant":"#474742","inverse-surface":"#303030","primary":"#8f4e00","on-primary":"#ffffff","surface-container-high":"#eae8e7","inverse-primary":"#ffb77a","outline":"#887364","secondary-fixed":"#a3f69c","surface":"#fbf9f8","secondary-fixed-dim":"#88d982","error-container":"#ffdad6","on-tertiary-container":"#44453f","on-background":"#1b1c1c","primary-fixed":"#ffdcc2","error":"#ba1a1a","on-surface-variant":"#554336","surface-dim":"#dcd9d9","surface-container-low":"#f6f3f2","tertiary-fixed-dim":"#c8c7bf","on-primary-container":"#693800","on-secondary":"#ffffff","on-primary-fixed-variant":"#6d3a00","surface-bright":"#fbf9f8","tertiary":"#5f5f59","on-error-container":"#93000a","on-tertiary":"#ffffff","on-tertiary-fixed":"#1b1c17","surface-tint":"#8f4e00","surface-variant":"#e4e2e1"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter":"24px","margin-mobile":"20px","container-max":"1280px","margin-desktop":"64px","unit":"8px","section-gap":"80px"},"fontFamily":{"headline-md":["Hanken Grotesk"],"label-md":["Inter"],"headline-lg":["Hanken Grotesk"],"caption":["Inter"],"body-md":["Inter"],"display-lg-mobile":["Hanken Grotesk"],"body-lg":["Inter"],"display-lg":["Hanken Grotesk"]},"fontSize":{"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.05em","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","fontWeight":"600"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"400"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display-lg-mobile":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"display-lg":["64px",{"lineHeight":"72px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+#cookmateSplash, #cookmateOnboarding { transition: opacity .35s ease, visibility .35s ease; }
+#cookmateSplash.is-hidden, #cookmateOnboarding.is-hidden { opacity:0; visibility:hidden; pointer-events:none; }
+#cookmateOnboarding { display:none; }
+#cookmateOnboarding.is-active { display:flex; }
+#formStart { display:none; }
+#formStart.is-ready { display:flex; }
+.cookmate-icon-pulse { animation: cookmatePulse 1.1s ease-in-out infinite; }
+@keyframes cookmatePulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(185,28,28,.25)} 50%{transform:scale(1.08);box-shadow:0 0 0 18px rgba(185,28,28,0)} }
+</style></head><body class="bg-background font-body-md text-on-surface antialiased">
+<!-- NEW: 2-second CookMate loading screen -->
+<div id="cookmateSplash" class="fixed inset-0 z-[200] bg-background flex flex-col items-center justify-center gap-6">
+  <div class="cookmate-icon-pulse w-24 h-24 rounded-[30px] bg-primary text-on-primary flex items-center justify-center shadow-2xl">
+    <span class="material-symbols-outlined text-[54px]">restaurant_menu</span>
+  </div>
+  <div class="text-center">
+    <h1 class="font-headline-lg text-headline-lg text-on-surface">CookMate India</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant mt-2" data-i18n="splash.subtitle">Preparing your kitchen...</p>
+  </div>
+</div>
+
+<!-- NEW: Chef name + website language onboarding -->
+<div id="cookmateOnboarding" class="fixed inset-0 z-[190] bg-background items-center justify-center p-5 overflow-y-auto">
+  <div class="w-full max-w-lg bg-surface-container-lowest rounded-[32px] p-8 md:p-10 shadow-2xl border border-outline-variant/20">
+    <div class="w-14 h-14 rounded-2xl bg-primary text-on-primary flex items-center justify-center mb-6">
+      <span class="material-symbols-outlined text-[30px]">restaurant</span>
+    </div>
+    <h2 class="font-headline-lg text-headline-lg text-on-surface mb-2" data-i18n="onboarding.title">Welcome to CookMate 👨‍🍳</h2>
+    <p class="font-body-md text-body-md text-on-surface-variant mb-8" data-i18n="onboarding.subtitle">Tell us your chef name and choose your website language.</p>
+    <label class="block font-label-md text-label-md text-on-surface mb-2" data-i18n="onboarding.chefNameLabel">Chef Name</label>
+    <input id="onboardingChefName" type="text" autocomplete="name" data-i18n-placeholder="onboarding.chefNamePlaceholder" placeholder="Enter your name" class="w-full px-6 py-4 rounded-2xl bg-surface-container-low border border-outline-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface mb-6" />
+    <label class="block font-label-md text-label-md text-on-surface mb-2" data-i18n="onboarding.languageLabel">Website Language</label>
+    <select id="onboardingLanguage" onchange="previewOnboardingLanguage(this.value)" class="w-full px-6 py-4 rounded-2xl bg-surface-container-low border border-outline-variant/50 focus:outline-none focus:border-primary font-body-md text-body-md text-on-surface mb-6">
+      <option value="en">English</option>
+      <option value="ta">தமிழ் (Tamil)</option>
+      <option value="hi">हिंदी (Hindi)</option>
+    </select>
+    <p id="onboardingStatus" class="hidden text-error text-caption mb-4"></p>
+    <button id="onboardingNextBtn" onclick="startCookMateJourney()" class="w-full px-6 py-4 rounded-2xl bg-primary text-on-primary font-headline-md text-headline-md shadow-lg hover:shadow-xl transition-all active:scale-[.98] flex items-center justify-center gap-2">
+      <span data-i18n="onboarding.next">Next</span> <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </div>
+</div><header class="fixed top-0 w-full z-50 bg-surface-container/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-all duration-300"><div class="h-20 max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop flex items-center justify-between"><div class="flex items-center gap-4"><img alt="CookMate India Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlXJTVxTPovPJP8zyXnNPdIVNWWobzQYkuhiX20aG6GYxmXbsKH0yipSiirn2a9yxNq5c4Lv3O90m9fT5U_PBZC9uVgVFLR6hEl24M8Q9VzU60rRD73WE9XsJAviRAtiIiKO9aFjrNsfeUBV4gizYnK29sEIQgWSiwCbRuO0yy626CnpfBwf_7hYWDTU_3D3PrYTdwo_O8juz66DUKtG5Eab0GIjBT3bXJ_cCv0xUvtWwkOxPZ0w"/><span class="font-headline-md text-headline-md text-primary tracking-tight">CookMate India</span></div><nav class="hidden md:flex items-center gap-unit px-8" data-active-classes="text-primary font-semibold"><a aria-current="page" class="px-4 py-2 transition-colors text-primary font-semibold" data-path="recipes" href="#" data-i18n="nav.recipes">Recipes</a><a class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="regions" href="#" data-i18n="nav.regions">Regions</a><a class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="professional" href="#" data-i18n="nav.professional">Professional</a><a class="px-4 py-2 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="community" href="#" data-i18n="nav.community">Community</a></nav><div class="flex items-center gap-3"><select id="headerLanguageSelect" onchange="changeWebsiteLanguage(this.value)" class="px-3 py-2 rounded-full bg-surface-container-low border border-outline-variant/50 text-on-surface-variant font-label-md text-label-md focus:outline-none focus:border-primary cursor-pointer">
+<option value="en">EN</option><option value="hi">हिं</option><option value="ta">தமி</option>
+</select><button onclick="document.getElementById('formStart').scrollIntoView({behavior:'smooth'})" class="hidden sm:block px-6 py-2.5 bg-primary text-on-primary font-label-md text-label-md rounded-full hover:shadow-lg transition-all active:scale-95" data-i18n="header.getStarted">Get Started</button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full relative">
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center justify-center -mt-20 pt-20 overflow-hidden">
+<!-- Background Image with Scrim -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest/95 via-surface-container-lowest/80 to-transparent z-10"></div>
+<img alt="Fresh Indian ingredients arranged beautifully on a marble countertop" class="w-full h-full object-cover object-right" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwi7myGWMtpcCu7K1hL7i532JUeFki9DGkj-xQJaJtO-fL4JSkGID5NiRjWd3VmghTa4LFqsbdNv9KZ3nuR-nUHgG8uLt8pu2KrzM1_gHtv4-3oNEIl4rTSarri4nwGxxdZZnJeX3LMl45uCOBp6HSR0PWnoilvUkj6Eiw5yzIV7T2PenWvQx18Pq_BJyLWMs626rTocWb82km3vodC8M2etKo4nc0m4CTXilzSKFFJvV2Gouzsg"/>
+</div>
+<div class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<div class="col-span-1 lg:col-span-7 flex flex-col items-start gap-8">
+<div class="inline-flex items-center gap-2 px-4 py-2 bg-primary-container/20 backdrop-blur-md rounded-full border border-primary/20 shadow-sm">
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest" data-i18n="hero.badge">Smart Recipe Generator</span>
+</div>
+<div class="flex flex-col gap-4">
+<h1 class="font-display-lg-mobile lg:font-display-lg text-display-lg-mobile lg:text-display-lg text-on-surface">
+<span class="block" data-i18n="hero.title1">🍲 What Can I</span>
+<span class="block text-primary" data-i18n="hero.title2">Cook Today?</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl" data-i18n="hero.desc">
+            Turn the ingredients in your kitchen into delicious Indian meals. Personalized recipes based on your ingredients, cuisine preference, cooking time, and dietary needs.
+          </p>
+</div>
+<div class="flex flex-wrap items-center gap-4 text-on-surface-variant font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">volunteer_activism</span>
+<span data-i18n="hero.free">Completely Free</span>
+</div>
+<div class="hidden sm:block w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+<span data-i18n="hero.instant">Instant Results</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mt-4">
+<button onclick="document.getElementById('formStart').scrollIntoView({behavior:'smooth'})" class="w-full sm:w-auto px-8 py-4 bg-primary text-on-primary rounded-full font-label-md text-label-md shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+            <span data-i18n="hero.cta">Start Cooking</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<!-- Trust Indicators -->
+<div class="flex flex-wrap gap-3 mt-8">
+<div class="px-4 py-2 rounded-full bg-surface-container/50 backdrop-blur-sm border border-outline-variant/30 font-caption text-caption text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+            <span data-i18n="hero.trust1">Indian Recipes</span>
+          </div>
+<div class="px-4 py-2 rounded-full bg-surface-container/50 backdrop-blur-sm border border-outline-variant/30 font-caption text-caption text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+            <span data-i18n="hero.trust2">Multiple Languages</span>
+          </div>
+<div class="px-4 py-2 rounded-full bg-surface-container/50 backdrop-blur-sm border border-outline-variant/30 font-caption text-caption text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">check_circle</span>
+            <span data-i18n="hero.trust3">Ingredient-Based</span>
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Content Container -->
+<div id="formStart" class="w-full max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop py-section-gap flex flex-col gap-section-gap relative z-10 bg-background">
+<!-- Name -->
+<section class="hidden" aria-hidden="true">
+<input id="userName" type="hidden" />
+</section>
+
+<!-- Dish Search (optional shortcut) -->
+<section class="reveal-on-scroll flex flex-col gap-4 p-8 rounded-[24px] bg-surface-container-low shadow-sm mb-8 relative">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-[24px]">search</span>
+<h3 class="font-headline-md text-headline-md text-on-surface" data-i18n="dish.title">Looking for something specific?</h3>
+</div>
+<p class="font-body-md text-caption text-on-surface-variant" data-i18n="dish.desc">Search a dish name — we'll suggest matches. Optional; skip if you'd rather pick ingredients below.</p>
+<input id="dishSearch" type="text" autocomplete="off" data-i18n-placeholder="dish.placeholder" placeholder="e.g. paneer butter masala, dosa, gulab jamun..." class="w-full px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-body-md text-body-md text-on-surface transition-all"/>
+<div id="dishSuggestions" class="hidden absolute left-8 right-8 top-full mt-1 bg-surface-container-lowest border border-outline-variant/40 rounded-2xl shadow-lg overflow-hidden z-20"></div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Website language is selected during onboarding; hidden select is kept for existing recipe logic -->
+<div class="hidden" aria-hidden="true">
+<select id="languageSelect" onchange="selectLanguage(this.value)">
+<option value="en">English</option><option value="hi">हिंदी (Hindi)</option><option value="ta">தமிழ் (Tamil)</option>
+</select>
+</div>
+<!-- Meal Time -->
+<section class="reveal-on-scroll flex flex-col gap-6 p-8 rounded-[24px] bg-surface-container-low shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center font-label-md text-label-md">1</div>
+<h3 class="font-headline-md text-headline-md text-on-surface" data-i18n="meal.title">Meal Time</h3>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2" id="mealTimeChips">
+<button data-meal="breakfast" onclick="selectMeal('breakfast')" class="meal-chip flex flex-col items-center gap-3 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/50 hover:border-primary hover:shadow-md transition-all group">
+<span class="material-symbols-outlined text-[32px] text-primary-container group-hover:scale-110 transition-transform">light_mode</span>
+<span class="font-label-md text-label-md text-on-surface" data-i18n="meal.breakfast">Breakfast</span>
+</button>
+<button data-meal="lunch" onclick="selectMeal('lunch')" class="meal-chip flex flex-col items-center gap-3 p-4 rounded-2xl bg-primary/10 border-2 border-primary shadow-sm group">
+<span class="material-symbols-outlined text-[32px] text-primary group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<span class="font-label-md text-label-md text-primary" data-i18n="meal.lunch">Lunch</span>
+</button>
+<button data-meal="snacks" onclick="selectMeal('snacks')" class="meal-chip flex flex-col items-center gap-3 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/50 hover:border-primary hover:shadow-md transition-all group">
+<span class="material-symbols-outlined text-[32px] text-primary-container group-hover:scale-110 transition-transform">coffee</span>
+<span class="font-label-md text-label-md text-on-surface" data-i18n="meal.snacks">Snacks</span>
+</button>
+<button data-meal="dinner" onclick="selectMeal('dinner')" class="meal-chip flex flex-col items-center gap-3 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/50 hover:border-primary hover:shadow-md transition-all group">
+<span class="material-symbols-outlined text-[32px] text-primary-container group-hover:scale-110 transition-transform">dark_mode</span>
+<span class="font-label-md text-label-md text-on-surface" data-i18n="meal.dinner">Dinner</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Step 4: Smart Ingredients -->
+<section class="reveal-on-scroll flex flex-col gap-8">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-md text-headline-md">4</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface" data-i18n="ing.sectionTitle">What's in your kitchen?</h2>
+</div>
+<div class="w-full max-w-3xl mx-auto relative group">
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative flex items-center p-2 rounded-full bg-surface-container-lowest border-2 border-outline-variant/30 shadow-sm focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 transition-all">
+<span class="material-symbols-outlined pl-4 text-on-surface-variant text-[28px]">search</span>
+<input class="w-full px-4 py-3 bg-transparent border-none focus:outline-none font-body-lg text-body-lg text-on-surface placeholder:text-on-surface-variant/50" data-i18n-placeholder="ing.placeholder" placeholder="E.g., Paneer, Tomato, Onion, Garam Masala..." type="text"/>
+<button class="px-6 py-3 bg-primary text-on-primary rounded-full font-label-md text-label-md shrink-0 shadow-sm hover:bg-primary-container hover:text-on-primary-container transition-colors" data-i18n="ing.add">Add</button>
+</div>
+</div>
+<!-- Ingredient Categories Bento -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+<!-- Veggies -->
+<div class="md:col-span-8 p-6 rounded-[24px] bg-secondary-container/20 border border-secondary/20">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-secondary" data-i18n="ing.veg">Vegetables & Greens</h4>
+<span class="material-symbols-outlined text-secondary">eco</span>
+</div>
+<div class="flex flex-wrap gap-2" id="ing-veg"></div>
+</div>
+<!-- Spices -->
+<div class="md:col-span-4 p-6 rounded-[24px] bg-primary-container/10 border border-primary/20">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-primary" data-i18n="ing.spice">Spices & Herbs</h4>
+<span class="material-symbols-outlined text-primary">local_florist</span>
+</div>
+<div class="flex flex-wrap gap-2" id="ing-spice"></div>
+</div>
+<!-- Nonveg -->
+<div class="md:col-span-12 p-6 rounded-[24px] bg-secondary-container/20 border border-secondary/20">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-secondary" data-i18n="ing.nonveg">Meat, Fish & Eggs</h4>
+<span class="material-symbols-outlined text-secondary">set_meal</span>
+</div>
+<div class="flex flex-wrap gap-2" id="ing-nonveg"></div>
+</div>
+<!-- Fruits & Juice -->
+<div class="md:col-span-6 p-6 rounded-[24px] bg-primary-container/10 border border-primary/20">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-primary" data-i18n="ing.fruit">Fruits & Juice</h4>
+<span class="material-symbols-outlined text-primary">nutrition</span>
+</div>
+<div class="flex flex-wrap gap-2" id="ing-fruit"></div>
+</div>
+<!-- Snacks, Sweets & Desserts -->
+<div class="md:col-span-6 p-6 rounded-[24px] bg-secondary-container/20 border border-secondary/20">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-secondary" data-i18n="ing.sweet">Snacks, Sweets & Desserts</h4>
+<span class="material-symbols-outlined text-secondary">cake</span>
+</div>
+<div class="flex flex-wrap gap-2" id="ing-sweet"></div>
+</div>
+<!-- Dairy & Pantry -->
+<div class="md:col-span-12 p-6 rounded-[24px] bg-surface-container-low border border-outline-variant/20 flex flex-col sm:flex-row gap-6">
+<div class="flex-1">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant mb-4" data-i18n="ing.dairy">Dairy & Protein</h4>
+<div class="flex flex-wrap gap-2" id="ing-dairy"></div>
+</div>
+<div class="hidden sm:block w-px bg-outline-variant/30"></div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant mb-4" data-i18n="ing.pantry">Pantry & Flour</h4>
+<div class="flex flex-wrap gap-2" id="ing-pantry"></div>
+</div>
+</div>
+
+</div>
+</section>
+<!-- Step 5: State Cuisine -->
+<section class="reveal-on-scroll flex flex-col gap-6 p-8 rounded-[24px] bg-surface-container-low shadow-sm mt-8">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center font-label-md text-label-md">5</div>
+<h3 class="font-headline-md text-headline-md text-on-surface" data-i18n="cuisine.title">State Cuisine</h3>
+</div>
+<select id="cuisineSelect" class="w-full px-6 py-3 rounded-full bg-surface-container-lowest border border-outline-variant/50 focus:outline-none focus:border-primary font-body-md text-body-md text-on-surface">
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Kerala">Kerala</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Telangana">Telangana</option>
+<option value="Punjab">Punjab</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Maharashtra">Maharashtra</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="West Bengal">West Bengal</option>
+</select>
+</section>
+
+<!-- Step 6: Confirm & Generate -->
+<section class="reveal-on-scroll flex flex-col gap-6 items-center text-center mt-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-md text-headline-md">4</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface" data-i18n="review.title">Review & Cook</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md" data-i18n="review.desc">All set? Review your selections, then generate your free personalized recipe.</p>
+</section>
+
+<!-- Generate CTA -->
+<div class="w-full flex justify-center mt-4 sticky bottom-8 z-50">
+<button id="reviewBtn" onclick="showReview()" class="px-10 py-5 bg-on-surface text-surface-container-lowest rounded-full font-headline-md text-headline-md shadow-2xl hover:scale-105 hover:bg-primary transition-all duration-300 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed">local_fire_department</span>
+<span data-i18n="generate.reviewContinue">Review & Continue</span>
+</button>
+</div>
+
+<!-- Status message -->
+<p id="statusMsg" class="text-center font-body-md text-body-md text-on-surface-variant mt-2"></p>
+
+<!-- Review Modal (shown before generating) -->
+<div id="reviewModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-5">
+<div class="bg-surface-container-lowest rounded-[24px] p-8 max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4" data-i18n="reviewModal.title">You're all set 🎉</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6" data-i18n="reviewModal.desc">Here's what we'll cook up for you.</p>
+<div id="reviewSummaryBox" class="bg-primary-container/10 rounded-2xl p-5 space-y-2 font-body-md text-body-md text-on-surface mb-6"></div>
+<p class="font-body-md text-caption text-on-surface-variant mb-6" data-i18n="reviewModal.freeNote">Your personalized recipe is completely free and will be ready right after you confirm.</p>
+<div class="flex gap-3">
+<button onclick="closeReview()" class="flex-1 px-6 py-3 rounded-full border border-outline-variant/50 text-on-surface font-label-md text-label-md" data-i18n="reviewModal.back">← Back</button>
+<button id="payBtn" onclick="startPayment()" class="flex-1 px-6 py-3 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm" data-i18n="reviewModal.generate">Generate My Recipe →</button>
+</div>
+</div>
+</div>
+
+<!-- Recipe Result Panel (hidden until generated) -->
+<section id="recipePanel" class="hidden flex flex-col gap-6 p-8 rounded-[24px] bg-surface-container-lowest border border-outline-variant/30 shadow-md mt-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface" id="recipeName"></h2>
+<div id="recipeMeta" class="flex flex-wrap gap-3 text-on-surface-variant font-label-md text-label-md"></div>
+
+<div>
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-primary mb-3" data-i18n="recipe.ingredients">Ingredients</h4>
+<ul id="recipeIngredients" class="space-y-2 font-body-md text-body-md text-on-surface-variant"></ul>
+</div>
+
+<div>
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-primary mb-3" data-i18n="recipe.steps">Steps</h4>
+<ol id="recipeSteps" class="space-y-3 font-body-md text-body-md text-on-surface-variant list-decimal list-inside"></ol>
+</div>
+
+<div id="recipeExtras" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+<!-- Audio Controls -->
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-primary-container/10 border border-primary/20 mt-4">
+<h4 class="font-label-md text-label-md uppercase tracking-wider text-primary" data-i18n="recipe.audioAssistant">Audio Cooking Assistant</h4>
+<div id="currentStepText" class="font-body-md text-body-md text-on-surface"></div>
+<div class="flex flex-wrap items-center gap-3">
+<button onclick="audioPlay()" class="px-4 py-2 rounded-full bg-primary text-on-primary flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">play_arrow</span><span data-i18n="recipe.play">Play</span></button>
+<button onclick="audioPause()" class="px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/50 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">pause</span><span data-i18n="recipe.pause">Pause</span></button>
+<button onclick="audioPrev()" class="px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/50 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">skip_previous</span><span data-i18n="recipe.prev">Prev</span></button>
+<button onclick="audioNext()" class="px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/50 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">skip_next</span><span data-i18n="recipe.next">Next</span></button>
+<button onclick="audioRepeat()" class="px-4 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/50 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">repeat</span><span data-i18n="recipe.repeat">Repeat</span></button>
+<select id="speedSelect" onchange="setSpeed(this.value)" class="px-3 py-2 rounded-full bg-surface-container-lowest border border-outline-variant/50 text-sm">
+<option value="0.8">0.8x</option>
+<option value="1" selected>1x</option>
+<option value="1.3">1.3x</option>
+</select>
+</div>
+</div>
+</section>
+</div>
+</div></main><footer class="w-full bg-surface-container-low border-t border-outline-variant/10 py-section-gap"><div class="max-w-container-max mx-auto px-margin-mobile lg:px-margin-desktop"><div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12"><div class="col-span-1 md:col-span-2"><img alt="CookMate India Logo" class="h-8 w-auto mb-6 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlXJTVxTPovPJP8zyXnNPdIVNWWobzQYkuhiX20aG6GYxmXbsKH0yipSiirn2a9yxNq5c4Lv3O90m9fT5U_PBZC9uVgVFLR6hEl24M8Q9VzU60rRD73WE9XsJAviRAtiIiKO9aFjrNsfeUBV4gizYnK29sEIQgWSiwCbRuO0yy626CnpfBwf_7hYWDTU_3D3PrYTdwo_O8juz66DUKtG5Eab0GIjBT3bXJ_cCv0xUvtWwkOxPZ0w"/><p class="text-on-surface-variant font-body-md text-body-md max-w-xs" data-i18n="footer.desc">The definitive digital companion for Indian culinary mastery. From street food classics to royal durbars.</p></div><div><h4 class="font-headline-md text-label-md uppercase tracking-widest text-on-surface mb-6" data-i18n="footer.discover">Discover</h4><ul class="space-y-4"><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.regionalCuisines">Regional Cuisines</li><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.quickRecipes">Quick Recipes</li><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.ingredientGuide">Ingredient Guide</li></ul></div><div><h4 class="font-headline-md text-label-md uppercase tracking-widest text-on-surface mb-6" data-i18n="footer.company">Company</h4><ul class="space-y-4"><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.ourStory">Our Story</li><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.culinaryExperts">Culinary Experts</li><li class="text-on-surface-variant font-body-md text-body-md cursor-pointer hover:text-primary transition-colors" data-i18n="footer.termsOfService">Terms of Service</li></ul></div></div><div class="pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4"><p class="text-on-tertiary-fixed-variant font-caption text-caption" data-i18n="footer.copyright">© 2024 CookMate India. Crafted for the modern kitchen.</p><div class="flex gap-6"><span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">language</span><span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">share</span></div></div></div></footer>
+
+<script>
+// ---------- STATE ----------
+const state = {
+  name: "",
+  language: "en",
+  plan: "fullday", // matches design default (Lunch/Full-Day highlighted)
+  meal: "lunch",
+  ingredients: new Set(["Tomato", "Turmeric", "Cumin", "Besan"]), // preselected to match design
+  cuisine: "Tamil Nadu"
+};
+
+// ---------- WEBSITE TRANSLATIONS (full-site UI, not the AI recipe content) ----------
+const SITE_I18N = {
+  en: {
+    "nav.recipes": "Recipes", "nav.regions": "Regions", "nav.professional": "Professional", "nav.community": "Community",
+    "header.getStarted": "Get Started",
+    "splash.subtitle": "Preparing your kitchen...",
+    "onboarding.title": "Welcome to CookMate 👨‍🍳", "onboarding.subtitle": "Tell us your chef name and choose your website language.",
+    "onboarding.chefNameLabel": "Chef Name", "onboarding.chefNamePlaceholder": "Enter your name",
+    "onboarding.languageLabel": "Website Language", "onboarding.next": "Next",
+    "onboarding.nameRequired": "Please enter your chef name.",
+    "hero.badge": "Smart Recipe Generator", "hero.title1": "🍲 What Can I", "hero.title2": "Cook Today?",
+    "hero.desc": "Turn the ingredients in your kitchen into delicious Indian meals. Personalized recipes based on your ingredients, cuisine preference, cooking time, and dietary needs.",
+    "hero.free": "Completely Free", "hero.instant": "Instant Results", "hero.cta": "Start Cooking",
+    "hero.trust1": "Indian Recipes", "hero.trust2": "Multiple Languages", "hero.trust3": "Ingredient-Based",
+    "dish.title": "Looking for something specific?",
+    "dish.desc": "Search a dish name — we'll suggest matches. Optional; skip if you'd rather pick ingredients below.",
+    "dish.placeholder": "e.g. paneer butter masala, dosa, gulab jamun...",
+    "meal.title": "Meal Time", "meal.breakfast": "Breakfast", "meal.lunch": "Lunch", "meal.snacks": "Snacks", "meal.dinner": "Dinner",
+    "ing.sectionTitle": "What's in your kitchen?", "ing.placeholder": "E.g., Paneer, Tomato, Onion, Garam Masala...", "ing.add": "Add",
+    "ing.veg": "Vegetables & Greens", "ing.spice": "Spices & Herbs", "ing.nonveg": "Meat, Fish & Eggs",
+    "ing.fruit": "Fruits & Juice", "ing.sweet": "Snacks, Sweets & Desserts", "ing.dairy": "Dairy & Protein", "ing.pantry": "Pantry & Flour",
+    "cuisine.title": "State Cuisine",
+    "review.title": "Review & Cook", "review.desc": "All set? Review your selections, then generate your free personalized recipe.",
+    "generate.reviewContinue": "Review & Continue",
+    "reviewModal.title": "You're all set 🎉", "reviewModal.desc": "Here's what we'll cook up for you.",
+    "reviewModal.freeNote": "Your personalized recipe is completely free and will be ready right after you confirm.",
+    "reviewModal.back": "← Back", "reviewModal.generate": "Generate My Recipe →",
+    "recipe.ingredients": "Ingredients", "recipe.steps": "Steps", "recipe.audioAssistant": "Audio Cooking Assistant",
+    "recipe.play": "Play", "recipe.pause": "Pause", "recipe.prev": "Prev", "recipe.next": "Next", "recipe.repeat": "Repeat",
+    "footer.desc": "The definitive digital companion for Indian culinary mastery. From street food classics to royal durbars.",
+    "footer.discover": "Discover", "footer.regionalCuisines": "Regional Cuisines", "footer.quickRecipes": "Quick Recipes", "footer.ingredientGuide": "Ingredient Guide",
+    "footer.company": "Company", "footer.ourStory": "Our Story", "footer.culinaryExperts": "Culinary Experts", "footer.termsOfService": "Terms of Service",
+    "footer.copyright": "© 2024 CookMate India. Crafted for the modern kitchen."
+  },
+  hi: {
+    "nav.recipes": "रेसिपी", "nav.regions": "क्षेत्र", "nav.professional": "प्रोफेशनल", "nav.community": "समुदाय",
+    "header.getStarted": "शुरू करें",
+    "splash.subtitle": "आपकी रसोई तैयार हो रही है...",
+    "onboarding.title": "CookMate में आपका स्वागत है 👨‍🍳", "onboarding.subtitle": "अपना शेफ नाम बताएं और वेबसाइट की भाषा चुनें।",
+    "onboarding.chefNameLabel": "शेफ का नाम", "onboarding.chefNamePlaceholder": "अपना नाम दर्ज करें",
+    "onboarding.languageLabel": "वेबसाइट भाषा", "onboarding.next": "आगे बढ़ें",
+    "onboarding.nameRequired": "कृपया अपना शेफ नाम दर्ज करें।",
+    "hero.badge": "स्मार्ट रेसिपी जनरेटर", "hero.title1": "🍲 आज मैं क्या", "hero.title2": "पका सकता/सकती हूँ?",
+    "hero.desc": "अपनी रसोई की सामग्री को स्वादिष्ट भारतीय व्यंजनों में बदलें। आपकी सामग्री, पसंदीदा व्यंजन शैली, समय और आहार आवश्यकताओं के अनुसार व्यक्तिगत रेसिपी।",
+    "hero.free": "पूरी तरह मुफ्त", "hero.instant": "तुरंत परिणाम", "hero.cta": "खाना बनाना शुरू करें",
+    "hero.trust1": "भारतीय व्यंजन", "hero.trust2": "कई भाषाएं", "hero.trust3": "सामग्री आधारित",
+    "dish.title": "कुछ खास ढूंढ रहे हैं?",
+    "dish.desc": "किसी व्यंजन का नाम खोजें — हम मिलते-जुलते सुझाव देंगे। यह वैकल्पिक है; नीचे सामग्री चुनने के लिए इसे छोड़ सकते हैं।",
+    "dish.placeholder": "जैसे पनीर बटर मसाला, डोसा, गुलाब जामुन...",
+    "meal.title": "भोजन का समय", "meal.breakfast": "नाश्ता", "meal.lunch": "दोपहर का भोजन", "meal.snacks": "स्नैक्स", "meal.dinner": "रात का खाना",
+    "ing.sectionTitle": "आपकी रसोई में क्या है?", "ing.placeholder": "जैसे पनीर, टमाटर, प्याज, गरम मसाला...", "ing.add": "जोड़ें",
+    "ing.veg": "सब्ज़ियाँ और साग", "ing.spice": "मसाले और जड़ी-बूटियाँ", "ing.nonveg": "मांस, मछली और अंडे",
+    "ing.fruit": "फल और जूस", "ing.sweet": "स्नैक्स, मिठाइयाँ और डेज़र्ट", "ing.dairy": "डेयरी और प्रोटीन", "ing.pantry": "पेंट्री और आटा",
+    "cuisine.title": "राज्य व्यंजन",
+    "review.title": "समीक्षा करें और पकाएं", "review.desc": "सब तैयार है? अपना चयन देखें, फिर अपनी मुफ्त व्यक्तिगत रेसिपी बनाएं।",
+    "generate.reviewContinue": "समीक्षा करें और आगे बढ़ें",
+    "reviewModal.title": "सब कुछ तैयार है 🎉", "reviewModal.desc": "यह रहा वह जो हम आपके लिए बनाने वाले हैं।",
+    "reviewModal.freeNote": "आपकी व्यक्तिगत रेसिपी पूरी तरह मुफ्त है और पुष्टि करते ही तैयार हो जाएगी।",
+    "reviewModal.back": "← वापस", "reviewModal.generate": "मेरी रेसिपी बनाएं →",
+    "recipe.ingredients": "सामग्री", "recipe.steps": "चरण", "recipe.audioAssistant": "ऑडियो कुकिंग असिस्टेंट",
+    "recipe.play": "चलाएं", "recipe.pause": "रोकें", "recipe.prev": "पिछला", "recipe.next": "अगला", "recipe.repeat": "दोहराएं",
+    "footer.desc": "भारतीय पाककला की महारत के लिए आपका डिजिटल साथी। स्ट्रीट फूड से लेकर शाही व्यंजनों तक।",
+    "footer.discover": "खोजें", "footer.regionalCuisines": "क्षेत्रीय व्यंजन", "footer.quickRecipes": "झटपट रेसिपी", "footer.ingredientGuide": "सामग्री गाइड",
+    "footer.company": "कंपनी", "footer.ourStory": "हमारी कहानी", "footer.culinaryExperts": "पाक विशेषज्ञ", "footer.termsOfService": "सेवा की शर्तें",
+    "footer.copyright": "© 2024 CookMate India. आधुनिक रसोई के लिए बनाया गया।"
+  },
+  ta: {
+    "nav.recipes": "செய்முறைகள்", "nav.regions": "பகுதிகள்", "nav.professional": "தொழில்முறை", "nav.community": "சமூகம்",
+    "header.getStarted": "தொடங்குங்கள்",
+    "splash.subtitle": "உங்கள் சமையலறை தயாராகிறது...",
+    "onboarding.title": "CookMate-க்கு வரவேற்கிறோம் 👨‍🍳", "onboarding.subtitle": "உங்கள் சமையல்காரர் பெயரையும் இணைய தள மொழியையும் தேர்ந்தெடுக்கவும்.",
+    "onboarding.chefNameLabel": "சமையல்காரர் பெயர்", "onboarding.chefNamePlaceholder": "உங்கள் பெயரை உள்ளிடவும்",
+    "onboarding.languageLabel": "இணையதள மொழி", "onboarding.next": "அடுத்து",
+    "onboarding.nameRequired": "தயவுசெய்து உங்கள் சமையல்காரர் பெயரை உள்ளிடவும்.",
+    "hero.badge": "ஸ்மார்ட் ரெசிபி ஜெனரேட்டர்", "hero.title1": "🍲 இன்று நான் என்ன", "hero.title2": "சமைக்கலாம்?",
+    "hero.desc": "உங்கள் சமையலறையில் உள்ள பொருட்களை சுவையான இந்திய உணவுகளாக மாற்றுங்கள். உங்கள் பொருட்கள், விருப்பமான உணவு வகை, நேரம் மற்றும் உணவுத் தேவைகளின் அடிப்படையில் தனிப்பயன் செய்முறைகள்.",
+    "hero.free": "முற்றிலும் இலவசம்", "hero.instant": "உடனடி முடிவுகள்", "hero.cta": "சமைக்கத் தொடங்குங்கள்",
+    "hero.trust1": "இந்திய செய்முறைகள்", "hero.trust2": "பல மொழிகள்", "hero.trust3": "பொருட்கள் அடிப்படையில்",
+    "dish.title": "குறிப்பிட்ட ஒன்றைத் தேடுகிறீர்களா?",
+    "dish.desc": "ஒரு உணவின் பெயரைத் தேடுங்கள் — நாங்கள் பொருத்தங்களைப் பரிந்துரைப்போம். இது விருப்பத்தேர்வு; கீழே பொருட்களைத் தேர்ந்தெடுக்க விரும்பினால் தவிர்க்கலாம்.",
+    "dish.placeholder": "எ.கா. பன்னீர் பட்டர் மசாலா, தோசை, குலாப் ஜாமூன்...",
+    "meal.title": "உணவு நேரம்", "meal.breakfast": "காலை உணவு", "meal.lunch": "மதிய உணவு", "meal.snacks": "சிற்றுண்டி", "meal.dinner": "இரவு உணவு",
+    "ing.sectionTitle": "உங்கள் சமையலறையில் என்ன இருக்கிறது?", "ing.placeholder": "எ.கா., பன்னீர், தக்காளி, வெங்காயம், கரம் மசாலா...", "ing.add": "சேர்",
+    "ing.veg": "காய்கறிகள் மற்றும் கீரைகள்", "ing.spice": "மசாலாப் பொருட்கள் மற்றும் மூலிகைகள்", "ing.nonveg": "இறைச்சி, மீன் மற்றும் முட்டைகள்",
+    "ing.fruit": "பழங்கள் மற்றும் ஜூஸ்", "ing.sweet": "சிற்றுண்டி, இனிப்புகள் மற்றும் இனிப்பு வகைகள்", "ing.dairy": "பால் பொருட்கள் மற்றும் புரதம்", "ing.pantry": "மளிகைப் பொருட்கள் மற்றும் மாவு",
+    "cuisine.title": "மாநில உணவு வகை",
+    "review.title": "சரிபார்த்து சமையுங்கள்", "review.desc": "எல்லாம் தயாரா? உங்கள் தேர்வுகளைச் சரிபார்த்து, உங்கள் இலவச தனிப்பயன் செய்முறையை உருவாக்குங்கள்.",
+    "generate.reviewContinue": "சரிபார்த்து தொடரவும்",
+    "reviewModal.title": "எல்லாம் தயார் 🎉", "reviewModal.desc": "உங்களுக்காக நாங்கள் சமைக்கப் போவது இதோ.",
+    "reviewModal.freeNote": "உங்கள் தனிப்பயன் செய்முறை முற்றிலும் இலவசம், நீங்கள் உறுதிப்படுத்திய உடனேயே தயாராகிவிடும்.",
+    "reviewModal.back": "← பின்செல்", "reviewModal.generate": "எனது செய்முறையை உருவாக்கு →",
+    "recipe.ingredients": "பொருட்கள்", "recipe.steps": "படிகள்", "recipe.audioAssistant": "ஆடியோ சமையல் உதவியாளர்",
+    "recipe.play": "இயக்கு", "recipe.pause": "இடைநிறுத்து", "recipe.prev": "முந்தையது", "recipe.next": "அடுத்தது", "recipe.repeat": "மீண்டும்",
+    "footer.desc": "இந்திய சமையல் திறமைக்கான உங்கள் இணையான டிஜிட்டல் தோழன். தெரு உணவு முதல் அரச விருந்து வரை.",
+    "footer.discover": "கண்டறியுங்கள்", "footer.regionalCuisines": "பிராந்திய உணவுகள்", "footer.quickRecipes": "விரைவு செய்முறைகள்", "footer.ingredientGuide": "பொருட்கள் வழிகாட்டி",
+    "footer.company": "நிறுவனம்", "footer.ourStory": "எங்கள் கதை", "footer.culinaryExperts": "சமையல் நிபுணர்கள்", "footer.termsOfService": "சேவை விதிமுறைகள்",
+    "footer.copyright": "© 2024 CookMate India. நவீன சமையலறைக்காக உருவாக்கப்பட்டது."
+  }
+};
+
+function applyWebsiteLanguage(lang) {
+  const dict = SITE_I18N[lang] || SITE_I18N.en;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (dict[key]) el.setAttribute("placeholder", dict[key]);
+  });
+  document.documentElement.lang = lang;
+  const headerSel = document.getElementById("headerLanguageSelect");
+  if (headerSel) headerSel.value = lang;
+  const onboardingSel = document.getElementById("onboardingLanguage");
+  if (onboardingSel) onboardingSel.value = lang;
+  const hiddenSel = document.getElementById("languageSelect");
+  if (hiddenSel) hiddenSel.value = lang;
+  if (typeof renderIngredients === "function") renderIngredients();
+  const dishBox = document.getElementById("dishSuggestions");
+  if (dishBox) { dishBox.classList.add("hidden"); dishBox.innerHTML = ""; }
+}
+
+// Called any time (header switcher) — changes the whole site language on the fly.
+function changeWebsiteLanguage(lang) {
+  state.language = lang;
+  localStorage.setItem("cookmate_website_language", lang);
+  applyWebsiteLanguage(lang);
+}
+
+// Live-preview while still on the onboarding screen, before confirming.
+function previewOnboardingLanguage(lang) {
+  applyWebsiteLanguage(lang);
+}
+
+// ---------- NEW SPLASH + ONBOARDING FLOW ----------
+function startCookMateJourney() {
+  const nameInput = document.getElementById("onboardingChefName");
+  const languageInput = document.getElementById("onboardingLanguage");
+  const status = document.getElementById("onboardingStatus");
+  const name = nameInput.value.trim();
+
+  if (!name) {
+    const dict = SITE_I18N[languageInput.value] || SITE_I18N.en;
+    status.textContent = dict["onboarding.nameRequired"];
+    status.classList.remove("hidden");
+    nameInput.focus();
+    return;
+  }
+
+  const language = languageInput.value;
+  state.name = name;
+  state.language = language;
+  document.getElementById("userName").value = name;
+  document.getElementById("languageSelect").value = language;
+  localStorage.setItem("cookmate_chef_name", name);
+  localStorage.setItem("cookmate_website_language", language);
+  applyWebsiteLanguage(language);
+
+  document.getElementById("cookmateOnboarding").classList.add("is-hidden");
+  setTimeout(() => {
+    document.getElementById("cookmateOnboarding").classList.remove("is-active");
+    const form = document.getElementById("formStart");
+    form.classList.add("is-ready");
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 350);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const savedName = localStorage.getItem("cookmate_chef_name");
+  const savedLanguage = localStorage.getItem("cookmate_website_language") || "en";
+  document.getElementById("onboardingChefName").value = savedName || "";
+  document.getElementById("onboardingLanguage").value = savedLanguage;
+  state.language = savedLanguage;
+  applyWebsiteLanguage(savedLanguage);
+
+  // Always show the new 2-second loading screen first.
+  setTimeout(() => {
+    const splash = document.getElementById("cookmateSplash");
+    splash.classList.add("is-hidden");
+    document.getElementById("cookmateOnboarding").classList.add("is-active");
+    setTimeout(() => splash.remove(), 400);
+  }, 2000);
+});
+
+const DISH_WORD_MAP = {
+  "Chicken": { ta: "கோழி", hi: "चिकन" },
+  "Mutton": { ta: "ஆட்டு இறைச்சி", hi: "मटन" },
+  "Fish": { ta: "மீன்", hi: "मछली" },
+  "Prawn": { ta: "இறால்", hi: "झींगा" },
+  "Prawns": { ta: "இறால்", hi: "झींगा" },
+  "Egg": { ta: "முட்டை", hi: "अंडा" },
+  "Beef": { ta: "மாட்டிறைச்சி", hi: "बीफ" },
+  "Pork": { ta: "பன்றி இறைச்சி", hi: "सूअर का मांस" },
+  "Duck": { ta: "வாத்து", hi: "बत्तख" },
+  "Crab": { ta: "நண்டு", hi: "केकड़ा" },
+  "Squid": { ta: "கணவாய்", hi: "स्क्विड" },
+  "Paneer": { ta: "பன்னீர்", hi: "पनीर" },
+  "Curry": { ta: "கறி", hi: "करी" },
+  "Masala": { ta: "மசாலா", hi: "मसाला" },
+  "Biryani": { ta: "பிரியாணி", hi: "बिरयानी" },
+  "Rice": { ta: "சாதம்", hi: "चावल" },
+  "Pulao": { ta: "புலாவ்", hi: "पुलाव" },
+  "Fried Rice": { ta: "வறுத்த சாதம்", hi: "फ्राइड राइस" },
+  "Dal": { ta: "பருப்பு", hi: "दाल" },
+  "Curd": { ta: "தயிர்", hi: "दही" },
+  "Butter": { ta: "வெண்ணெய்", hi: "मक्खन" },
+  "Roti": { ta: "ரொட்டி", hi: "रोटी" },
+  "Naan": { ta: "நான்", hi: "नान" },
+  "Paratha": { ta: "பரோட்டா", hi: "पराठा" },
+  "Puri": { ta: "பூரி", hi: "पूरी" },
+  "Bhaji": { ta: "பாஜி", hi: "भाजी" },
+  "Bhature": { ta: "பதுரா", hi: "भटूरे" },
+  "Chole": { ta: "சோலே", hi: "छोले" },
+  "Rajma": { ta: "ராஜ்மா", hi: "राजमा" },
+  "Chawal": { ta: "சாதம்", hi: "चावल" },
+  "Aloo": { ta: "உருளைக்கிழங்கு", hi: "आलू" },
+  "Gobi": { ta: "காலிஃபிளவர்", hi: "गोभी" },
+  "Baingan": { ta: "கத்தரிக்காய்", hi: "बैंगन" },
+  "Bhindi": { ta: "வெண்டைக்காய்", hi: "भिंडी" },
+  "Palak": { ta: "பாலக்", hi: "पालक" },
+  "Matar": { ta: "பட்டாணி", hi: "मटर" },
+  "Kadai": { ta: "கடாய்", hi: "कढ़ाई" },
+  "Shahi": { ta: "ஷாஹி", hi: "शाही" },
+  "Malai": { ta: "மலாய்", hi: "मलाई" },
+  "Kofta": { ta: "கோஃப்தா", hi: "कोफ्ता" },
+  "Tikka": { ta: "டிக்கா", hi: "टिक्का" },
+  "Tandoori": { ta: "தந்தூரி", hi: "तंदूरी" },
+  "Kebab": { ta: "கபாப்", hi: "कबाब" },
+  "Korma": { ta: "கோர்மா", hi: "कोरमा" },
+  "Vindaloo": { ta: "விந்தலூ", hi: "विंडालू" },
+  "Chukka": { ta: "சுக்கா", hi: "चुक्का" },
+  "Pepper": { ta: "மிளகு", hi: "काली मिर्च" },
+  "Roast": { ta: "வறுவல்", hi: "रोस्ट" },
+  "Sukka": { ta: "சுக்கா", hi: "सूखा" },
+  "Manchurian": { ta: "மஞ்சூரியன்", hi: "मंचूरियन" },
+  "Noodles": { ta: "நூடுல்ஸ்", hi: "नूडल्स" },
+  "Chilli": { ta: "மிளகாய்", hi: "मिर्च" },
+  "Fry": { ta: "வறுவல்", hi: "फ्राई" },
+  "Kurma": { ta: "குருமா", hi: "कोरमा" },
+  "Sambar": { ta: "சாம்பார்", hi: "सांबर" },
+  "Rasam": { ta: "ரசம்", hi: "रसम" },
+  "Poriyal": { ta: "பொரியல்", hi: "पोरियल" },
+  "Kootu": { ta: "கூட்டு", hi: "कूटू" },
+  "Vada": { ta: "வடை", hi: "वड़ा" },
+  "Idli": { ta: "இட்லி", hi: "इडली" },
+  "Dosa": { ta: "தோசை", hi: "डोसा" },
+  "Uttapam": { ta: "உத்தப்பம்", hi: "उत्तपम" },
+  "Upma": { ta: "உப்புமா", hi: "उपमा" },
+  "Poha": { ta: "அவல்", hi: "पोहा" },
+  "Pongal": { ta: "பொங்கல்", hi: "पोंगल" },
+  "Payasam": { ta: "பாயசம்", hi: "पायसम" },
+  "Kheer": { ta: "கீர்", hi: "खीर" },
+  "Halwa": { ta: "அல்வா", hi: "हलवा" },
+  "Ladoo": { ta: "லட்டு", hi: "लड्डू" },
+  "Barfi": { ta: "பர்பி", hi: "बर्फी" },
+  "Jamun": { ta: "ஜாமூன்", hi: "जामुन" },
+  "Gulab": { ta: "குலாப்", hi: "गुलाब" },
+  "Rasgulla": { ta: "ரஸ்கல்லா", hi: "रसगुल्ला" },
+  "Jalebi": { ta: "ஜிலேபி", hi: "जलेबी" },
+  "Kulfi": { ta: "குல்ஃபி", hi: "कुल्फी" },
+  "Lassi": { ta: "லஸ்ஸி", hi: "लस्सी" },
+  "Mango": { ta: "மாம்பழம்", hi: "आम" },
+  "Sweet": { ta: "இனிப்பு", hi: "मीठा" },
+  "Chaat": { ta: "சாட்", hi: "चाट" },
+  "Chai": { ta: "சாய்", hi: "चाय" },
+  "Coffee": { ta: "காபி", hi: "कॉफी" },
+  "Milk": { ta: "பால்", hi: "दूध" },
+  "Samosa": { ta: "சமோசா", hi: "समोसा" },
+  "Pav Bhaji": { ta: "பாவ் பாஜி", hi: "पाव भाजी" },
+  "Vada Pav": { ta: "வடா பாவ்", hi: "वड़ा पाव" },
+  "Misal": { ta: "மிசல்", hi: "मिसल" },
+  "Bhel Puri": { ta: "பேல் பூரி", hi: "भेल पुरी" },
+  "Pani Puri": { ta: "பானி பூரி", hi: "पानी पूरी" },
+  "Kachori": { ta: "கச்சோரி", hi: "कचौरी" },
+  "Cutlet": { ta: "கட்லெட்", hi: "कटलेट" },
+  "Bonda": { ta: "போண்டா", hi: "बोंडा" },
+  "Pakora": { ta: "பகோரா", hi: "पकोड़ा" },
+  "Bajji": { ta: "பஜ்ஜி", hi: "भज्जी" },
+  "Onion": { ta: "வெங்காயம்", hi: "प्याज़" },
+  "Tomato": { ta: "தக்காளி", hi: "टमाटर" },
+  "Garlic": { ta: "பூண்டு", hi: "लहसुन" },
+  "Mushroom": { ta: "காளான்", hi: "मशरूम" },
+  "Baby Corn": { ta: "பேபி கார்ன்", hi: "बेबी कॉर्न" },
+  "Corn": { ta: "சோளம்", hi: "मक्का" },
+  "Coconut": { ta: "தேங்காய்", hi: "नारियल" },
+  "Vegetable": { ta: "காய்கறி", hi: "सब्ज़ी" },
+  "Veg": { ta: "காய்கறி", hi: "वेज" },
+  "Mixed": { ta: "கலப்பு", hi: "मिक्स" },
+  "Lemon": { ta: "எலுமிச்சை", hi: "नींबू" },
+  "Tamarind": { ta: "புளி", hi: "इमली" },
+  "Chettinad": { ta: "செட்டிநாடு", hi: "चेट्टीनाड" },
+  "Kolhapuri": { ta: "கொல்ஹாபுரி", hi: "कोल्हापुरी" },
+  "Do Pyaza": { ta: "டூ பியாசா", hi: "दो प्याज़ा" },
+  "Lollipop": { ta: "லாலிபாப்", hi: "लॉलीपॉप" },
+  "Kheema": { ta: "கீமா", hi: "कीमा" },
+  "Rogan Josh": { ta: "ரோகன் ஜோஷ்", hi: "रोगन जोश" },
+  "Moilee": { ta: "மொய்லீ", hi: "मोइली" },
+  "Fry": { ta: "வறுவல்", hi: "फ्राई" },
+  "65": { ta: "65", hi: "65" },
+  "Roll": { ta: "ரோல்", hi: "रोल" },
+  "Frankie": { ta: "ஃபிராங்கி", hi: "फ्रैंकी" },
+  "Cheese": { ta: "சீஸ்", hi: "चीज़" },
+  "Sandwich": { ta: "சாண்ட்விச்", hi: "सैंडविच" },
+  "Soup": { ta: "சூப்", hi: "सूप" },
+};
+
+const DISH_LIST = [
+  "Idli",
+  "Masala Dosa",
+  "Plain Dosa",
+  "Rava Dosa",
+  "Set Dosa",
+  "Uttapam",
+  "Pesarattu",
+  "Upma",
+  "Rava Upma",
+  "Poha",
+  "Aloo Poha",
+  "Paratha",
+  "Aloo Paratha",
+  "Gobi Paratha",
+  "Paneer Paratha",
+  "Methi Paratha",
+  "Puri Bhaji",
+  "Chole Bhature",
+  "Idiyappam",
+  "Appam",
+  "Vada",
+  "Medu Vada",
+  "Sambar Vada",
+  "Rava Idli",
+  "Pongal",
+  "Ven Pongal",
+  "Sakkarai Pongal",
+  "Adai",
+  "Kesari Bath",
+  "Uggani",
+  "Sattu Paratha",
+  "Missi Roti",
+  "Thepla",
+  "Dhokla",
+  "Khaman",
+  "Handvo",
+  "Muthia",
+  "Sabudana Khichdi",
+  "Poori",
+  "Bedmi Puri",
+  "Chila (Besan)",
+  "Cheela",
+  "Bread Omelette",
+  "Egg Bhurji",
+  "Kanda Poha",
+  "Vermicelli Upma",
+  "Semiya Upma",
+  "Ragi Dosa",
+  "Neer Dosa",
+  "Akki Roti",
+  "Jolada Rotti",
+  "Paneer Butter Masala",
+  "Palak Paneer",
+  "Kadai Paneer",
+  "Shahi Paneer",
+  "Matar Paneer",
+  "Paneer Tikka Masala",
+  "Malai Kofta",
+  "Aloo Gobi",
+  "Baingan Bharta",
+  "Bhindi Masala",
+  "Dal Makhani",
+  "Dal Tadka",
+  "Dal Fry",
+  "Rajma Masala",
+  "Chole Masala",
+  "Kadala Curry",
+  "Sambar",
+  "Rasam",
+  "Avial",
+  "Kootu",
+  "Poriyal",
+  "Vegetable Kurma",
+  "Mixed Veg Curry",
+  "Vegetable Jalfrezi",
+  "Aloo Matar",
+  "Aloo Baingan",
+  "Bhindi Do Pyaza",
+  "Gobi Manchurian",
+  "Veg Manchurian",
+  "Paneer 65",
+  "Chana Masala",
+  "Kadai Vegetable",
+  "Undhiyu",
+  "Sev Tamatar",
+  "Lauki Kofta",
+  "Karela Fry",
+  "Kootu Curry",
+  "Vazhakkai Poriyal",
+  "Beetroot Poriyal",
+  "Cabbage Poriyal",
+  "Carrot Poriyal",
+  "Vendakkai Curry",
+  "Vathal Kuzhambu",
+  "Puli Kuzhambu",
+  "Kara Kuzhambu",
+  "Vegetable Stew",
+  "Kadai Mushroom",
+  "Mushroom Masala",
+  "Paneer Do Pyaza",
+  "Egg Curry",
+  "Egg Masala",
+  "Anda Bhurji",
+  "Chicken Biryani",
+  "Mutton Biryani",
+  "Veg Biryani",
+  "Egg Biryani",
+  "Fish Biryani",
+  "Prawn Biryani",
+  "Hyderabadi Biryani",
+  "Lucknowi Biryani",
+  "Kolkata Biryani",
+  "Ambur Biryani",
+  "Dindigul Biryani",
+  "Malabar Biryani",
+  "Chicken Pulao",
+  "Veg Pulao",
+  "Peas Pulao",
+  "Jeera Rice",
+  "Lemon Rice",
+  "Tamarind Rice",
+  "Curd Rice",
+  "Coconut Rice",
+  "Tomato Rice",
+  "Bisi Bele Bath",
+  "Vangi Bath",
+  "Puliyodharai",
+  "Tomato Bath",
+  "Ghee Rice",
+  "Kashmiri Pulao",
+  "Vegetable Fried Rice",
+  "Egg Fried Rice",
+  "Chicken Fried Rice",
+  "Schezwan Fried Rice",
+  "Curd Rice with Tempering",
+  "Khichdi",
+  "Moong Dal Khichdi",
+  "Masoor Dal Khichdi",
+  "Butter Chicken",
+  "Chicken Tikka",
+  "Chicken Tikka Masala",
+  "Tandoori Chicken",
+  "Chicken Curry",
+  "Chicken Chettinad",
+  "Chicken 65",
+  "Chicken Manchurian",
+  "Chicken Kolhapuri",
+  "Chicken Korma",
+  "Chicken Do Pyaza",
+  "Chicken Vindaloo",
+  "Chicken Chukka",
+  "Pepper Chicken",
+  "Chicken Roast",
+  "Chicken Sukka",
+  "Kadai Chicken",
+  "Chicken Lollipop",
+  "Chicken Kebab",
+  "Malai Chicken Tikka",
+  "Mutton Curry",
+  "Mutton Rogan Josh",
+  "Mutton Korma",
+  "Mutton Chukka",
+  "Mutton Kola Urundai",
+  "Mutton Kheema",
+  "Keema Matar",
+  "Beef Fry",
+  "Beef Curry",
+  "Beef Ularthiyathu",
+  "Pork Vindaloo",
+  "Pork Sorpotel",
+  "Duck Roast",
+  "Fish Curry",
+  "Fish Fry",
+  "Fish Moilee",
+  "Meen Kuzhambu",
+  "Karimeen Pollichathu",
+  "Prawn Curry",
+  "Prawn Fry",
+  "Prawn Masala",
+  "Crab Masala",
+  "Squid Fry",
+  "Fish Tikka",
+  "Amritsari Fish",
+  "Goan Fish Curry",
+  "Konkani Fish Curry",
+  "Fish 65",
+  "Samosa",
+  "Pav Bhaji",
+  "Vada Pav",
+  "Misal Pav",
+  "Bhel Puri",
+  "Sev Puri",
+  "Pani Puri",
+  "Dahi Puri",
+  "Aloo Tikki",
+  "Ragda Pattice",
+  "Dabeli",
+  "Kachori",
+  "Pyaz Kachori",
+  "Chaat",
+  "Papdi Chaat",
+  "Sev Puri Chaat",
+  "Corn Chaat",
+  "Fruit Chaat",
+  "Bread Pakora",
+  "Onion Pakora",
+  "Aloo Pakora",
+  "Mirchi Bajji",
+  "Gobi Manchurian Dry",
+  "Baby Corn Manchurian",
+  "Paneer Pakora",
+  "Cutlet",
+  "Veg Cutlet",
+  "Bonda",
+  "Mysore Bonda",
+  "Bajji",
+  "Punugulu",
+  "Masala Vada",
+  "Dahi Vada",
+  "Sabudana Vada",
+  "Aloo Chaat",
+  "Kathi Roll",
+  "Egg Roll",
+  "Chicken Roll",
+  "Frankie",
+  "Naan",
+  "Butter Naan",
+  "Garlic Naan",
+  "Tandoori Roti",
+  "Roti",
+  "Chapati",
+  "Phulka",
+  "Kulcha",
+  "Amritsari Kulcha",
+  "Rumali Roti",
+  "Lachha Paratha",
+  "Malabar Parotta",
+  "Kerala Parotta",
+  "Bhatura",
+  "Sambar Rice",
+  "Rasam Rice",
+  "Kothu Parotta",
+  "Chettinad Chicken Curry",
+  "Chettinad Mutton Curry",
+  "Meen Varuval",
+  "Kozhi Varuval",
+  "Kanchipuram Idli",
+  "Thattai",
+  "Murukku",
+  "Ellu Urundai",
+  "Kara Boondi",
+  "Puli Inji",
+  "Mor Kuzhambu",
+  "Ennai Kathirikai",
+  "Vendakkai Poriyal",
+  "Keerai Masiyal",
+  "Paal Payasam",
+  "Semiya Payasam",
+  "Ada Pradhaman",
+  "Rava Kesari",
+  "Ariselu",
+  "Pesarattu Upma",
+  "Machher Jhol",
+  "Shorshe Ilish",
+  "Aloo Posto",
+  "Chingri Malai Curry",
+  "Kosha Mangsho",
+  "Luchi",
+  "Cholar Dal",
+  "Bengali Fish Curry",
+  "Rasgulla",
+  "Sandesh",
+  "Mishti Doi",
+  "Chomchom",
+  "Sarson Ka Saag",
+  "Makki Di Roti",
+  "Amritsari Chole",
+  "Punjabi Kadhi Pakora",
+  "Rajma Chawal",
+  "Butter Paneer",
+  "Dal Bukhara",
+  "Tandoori Aloo",
+  "Punjabi Chana Masala",
+  "Khandvi",
+  "Fafda",
+  "Gujarati Kadhi",
+  "Dal Dhokli",
+  "Sev Tameta Nu Shaak",
+  "Khakhra",
+  "Puran Poli",
+  "Kolhapuri Chicken",
+  "Bharli Vangi",
+  "Zunka Bhakri",
+  "Modak",
+  "Batata Vada",
+  "Thalipeeth",
+  "Dal Baati Churma",
+  "Gatte Ki Sabzi",
+  "Ker Sangri",
+  "Laal Maas",
+  "Pyaaz Kachori",
+  "Mirchi Vada",
+  "Rajasthani Kadhi",
+  "Gulab Jamun",
+  "Rasmalai",
+  "Jalebi",
+  "Kaju Katli",
+  "Barfi",
+  "Besan Ladoo",
+  "Motichoor Ladoo",
+  "Boondi Ladoo",
+  "Coconut Ladoo",
+  "Mysore Pak",
+  "Halwa",
+  "Gajar Ka Halwa",
+  "Moong Dal Halwa",
+  "Suji Halwa",
+  "Payasam",
+  "Kheer",
+  "Rice Kheer",
+  "Vermicelli Kheer",
+  "Shrikhand",
+  "Basundi",
+  "Peda",
+  "Malpua",
+  "Kulfi",
+  "Falooda",
+  "Sheera",
+  "Til Ladoo",
+  "Coconut Barfi",
+  "Anjeer Barfi",
+  "Kalakand",
+  "Soan Papdi",
+  "Balushahi",
+  "Imarti",
+  "Ghevar",
+  "Doodh Peda",
+  "Rabri",
+  "Masala Chai",
+  "Filter Coffee",
+  "Mango Lassi",
+  "Sweet Lassi",
+  "Salted Lassi",
+  "Buttermilk (Chaas)",
+  "Rose Milk",
+  "Badam Milk",
+  "Jigarthanda",
+  "Nannari Sherbet",
+  "Sugarcane Juice",
+  "Coconut Water",
+  "Thandai",
+  "Jaljeera",
+  "Aam Panna",
+  "Sattu Sharbat",
+  "Rooh Afza Sharbat",
+  "Panakam",
+  "Chilli Paneer",
+  "Chilli Chicken",
+  "Schezwan Noodles",
+  "Hakka Noodles",
+  "Veg Fried Rice",
+  "American Chopsuey",
+  "Honey Chilli Potato",
+  "Crispy Corn"
+];
+
+const INGREDIENT_GROUPS = {
+  "ing-veg": [
+    { en: "Potato", ta: "உருளைக்கிழங்கு", hi: "आलू" },
+    { en: "Onion", ta: "வெங்காயம்", hi: "प्याज़" },
+    { en: "Tomato", ta: "தக்காளி", hi: "टमाटर" },
+    { en: "Garlic", ta: "பூண்டு", hi: "लहसुन" },
+    { en: "Ginger", ta: "இஞ்சி", hi: "अदरक" },
+    { en: "Spinach (Palak)", ta: "பாலக் கீரை", hi: "पालक" },
+    { en: "Cauliflower", ta: "காலிஃபிளவர்", hi: "फूलगोभी" },
+    { en: "Carrot", ta: "கேரட்", hi: "गाजर" },
+    { en: "Brinjal", ta: "கத்தரிக்காய்", hi: "बैंगन" },
+    { en: "Capsicum", ta: "குடமிளகாய்", hi: "शिमला मिर्च" },
+    { en: "Cabbage", ta: "முட்டைக்கோஸ்", hi: "पत्तागोभी" },
+    { en: "Peas", ta: "பட்டாணி", hi: "मटर" },
+    { en: "Beetroot", ta: "பீட்ரூட்", hi: "चुकंदर" },
+    { en: "Radish", ta: "முள்ளங்கி", hi: "मूली" },
+    { en: "Bottle Gourd (Lauki)", ta: "சுரைக்காய்", hi: "लौकी" },
+    { en: "Bitter Gourd (Karela)", ta: "பாகற்காய்", hi: "करेला" },
+    { en: "Okra (Bhindi)", ta: "வெண்டைக்காய்", hi: "भिंडी" },
+    { en: "Drumstick", ta: "முருங்கைக்காய்", hi: "सहजन" },
+    { en: "Pumpkin", ta: "பூசணிக்காய்", hi: "कद्दू" },
+    { en: "Cucumber", ta: "வெள்ளரிக்காய்", hi: "खीरा" },
+    { en: "Green Chili", ta: "பச்சை மிளகாய்", hi: "हरी मिर्च" },
+    { en: "Mushroom", ta: "காளான்", hi: "मशरूम" },
+    { en: "Beans", ta: "பீன்ஸ்", hi: "फलियाँ" },
+    { en: "Corn", ta: "சோளம்", hi: "मक्का" },
+    { en: "Sweet Potato", ta: "சர்க்கரைவள்ளிக் கிழங்கு", hi: "शकरकंद" },
+    { en: "Fenugreek Leaves (Methi)", ta: "வெந்தய கீரை", hi: "मेथी के पत्ते" },
+  ],
+  "ing-spice": [
+    { en: "Turmeric", ta: "மஞ்சள்", hi: "हल्दी" },
+    { en: "Cumin", ta: "சீரகம்", hi: "जीरा" },
+    { en: "Garam Masala", ta: "கரம் மசாலா", hi: "गरम मसाला" },
+    { en: "Red Chili", ta: "சிவப்பு மிளகாய்", hi: "लाल मिर्च" },
+    { en: "Coriander Powder", ta: "மல்லி தூள்", hi: "धनिया पाउडर" },
+    { en: "Pepper", ta: "மிளகு", hi: "काली मिर्च" },
+    { en: "Mustard Seeds", ta: "கடுகு", hi: "सरसों के बीज" },
+    { en: "Fennel Seeds", ta: "சோம்பு", hi: "सौंफ" },
+    { en: "Cardamom", ta: "ஏலக்காய்", hi: "इलायची" },
+    { en: "Cinnamon", ta: "பட்டை", hi: "दालचीनी" },
+    { en: "Cloves", ta: "கிராம்பு", hi: "लौंग" },
+    { en: "Bay Leaf", ta: "பிரியாணி இலை", hi: "तेज पत्ता" },
+    { en: "Asafoetida (Hing)", ta: "பெருங்காயம்", hi: "हींग" },
+    { en: "Curry Leaves", ta: "கறிவேப்பிலை", hi: "करी पत्ता" },
+    { en: "Coriander Leaves", ta: "கொத்தமல்லி இலை", hi: "धनिया पत्ती" },
+    { en: "Mint Leaves", ta: "புதினா இலை", hi: "पुदीना पत्ती" },
+    { en: "Fenugreek Seeds", ta: "வெந்தயம்", hi: "मेथी दाना" },
+    { en: "Star Anise", ta: "அன்னாசி பூ", hi: "चक्र फूल" },
+    { en: "Nutmeg", ta: "ஜாதிக்காய்", hi: "जायफल" },
+    { en: "Chaat Masala", ta: "சாட் மசாலா", hi: "चाट मसाला" },
+  ],
+  "ing-nonveg": [
+    { en: "Chicken", ta: "கோழி", hi: "चिकन" },
+    { en: "Mutton", ta: "ஆட்டு இறைச்சி", hi: "मटन" },
+    { en: "Pork", ta: "பன்றி இறைச்சி", hi: "सूअर का मांस" },
+    { en: "Fish", ta: "மீன்", hi: "मछली" },
+    { en: "Prawns", ta: "இறால்", hi: "झींगा" },
+    { en: "Crab", ta: "நண்டு", hi: "केकड़ा" },
+    { en: "Egg", ta: "முட்டை", hi: "अंडा" },
+    { en: "Chicken Liver", ta: "கோழி கல்லீரல்", hi: "चिकन लिवर" },
+    { en: "Beef", ta: "மாட்டிறைச்சி", hi: "बीफ" },
+    { en: "Squid", ta: "கணவாய்", hi: "स्क्विड" },
+    { en: "Duck", ta: "வாத்து", hi: "बत्तख" },
+    { en: "Bacon", ta: "பேக்கன்", hi: "बेकन" },
+    { en: "Sausage", ta: "சாசேஜ்", hi: "सॉसेज" },
+  ],
+  "ing-fruit": [
+    { en: "Banana", ta: "வாழைப்பழம்", hi: "केला" },
+    { en: "Apple", ta: "ஆப்பிள்", hi: "सेब" },
+    { en: "Mango", ta: "மாம்பழம்", hi: "आम" },
+    { en: "Orange", ta: "ஆரஞ்சு", hi: "संतरा" },
+    { en: "Grapes", ta: "திராட்சை", hi: "अंगूर" },
+    { en: "Papaya", ta: "பப்பாளி", hi: "पपीता" },
+    { en: "Pineapple", ta: "அன்னாசி", hi: "अनानास" },
+    { en: "Watermelon", ta: "தர்பூசணி", hi: "तरबूज़" },
+    { en: "Pomegranate", ta: "மாதுளை", hi: "अनार" },
+    { en: "Guava", ta: "கொய்யா", hi: "अमरूद" },
+    { en: "Lemon", ta: "எலுமிச்சை", hi: "नींबू" },
+    { en: "Coconut", ta: "தேங்காய்", hi: "नारियल" },
+    { en: "Sapota (Chikoo)", ta: "சப்போட்டா", hi: "चीकू" },
+    { en: "Custard Apple", ta: "சீதாப்பழம்", hi: "शरीफा" },
+    { en: "Litchi", ta: "லிச்சி", hi: "लीची" },
+    { en: "Fresh Orange Juice", ta: "ஆரஞ்சு ஜூஸ்", hi: "संतरे का जूस" },
+    { en: "Fresh Mango Juice", ta: "மாம்பழ ஜூஸ்", hi: "आम का जूस" },
+    { en: "Coconut Water", ta: "இளநீர்", hi: "नारियल पानी" },
+    { en: "Sugarcane Juice", ta: "கரும்பு ஜூஸ்", hi: "गन्ने का रस" },
+    { en: "Mixed Fruit Juice", ta: "கலப்பு பழ ஜூஸ்", hi: "मिक्स फ्रूट जूस" },
+  ],
+  "ing-sweet": [
+    { en: "Sugar", ta: "சர்க்கரை", hi: "चीनी" },
+    { en: "Jaggery", ta: "வெல்லம்", hi: "गुड़" },
+    { en: "Honey", ta: "தேன்", hi: "शहद" },
+    { en: "Cocoa Powder", ta: "கோகோ தூள்", hi: "कोको पाउडर" },
+    { en: "Chocolate", ta: "சாக்லேட்", hi: "चॉकलेट" },
+    { en: "Vanilla Essence", ta: "வெனிலா எசென்ஸ்", hi: "वनीला एसेंस" },
+    { en: "Cashew Nuts", ta: "முந்திரி", hi: "काजू" },
+    { en: "Almonds", ta: "பாதாம்", hi: "बादाम" },
+    { en: "Pistachios", ta: "பிஸ்தா", hi: "पिस्ता" },
+    { en: "Raisins", ta: "திராட்சை (உலர்)", hi: "किशमिश" },
+    { en: "Khoya (Mawa)", ta: "கோயா", hi: "खोया" },
+    { en: "Semolina (Rava/Sooji)", ta: "ரவை", hi: "सूजी" },
+    { en: "Vermicelli (Semiya)", ta: "சேமியா", hi: "सेवइयां" },
+    { en: "Poha (Flattened Rice)", ta: "அவல்", hi: "पोहा" },
+    { en: "Sev", ta: "சேவ்", hi: "सेव" },
+    { en: "Boondi", ta: "பூந்தி", hi: "बूंदी" },
+    { en: "Gram Flour Sweets Base", ta: "கடலை மாவு இனிப்பு அடிப்படை", hi: "बेसन मिठाई बेस" },
+    { en: "Milk Powder", ta: "பால் தூள்", hi: "मिल्क पाउडर" },
+    { en: "Saffron", ta: "குங்குமப்பூ", hi: "केसर" },
+    { en: "Cardamom Powder", ta: "ஏலக்காய் தூள்", hi: "इलायची पाउडर" },
+  ],
+  "ing-dairy": [
+    { en: "Paneer", ta: "பன்னீர்", hi: "पनीर" },
+    { en: "Curd (Dahi)", ta: "தயிர்", hi: "दही" },
+    { en: "Milk", ta: "பால்", hi: "दूध" },
+    { en: "Ghee", ta: "நெய்", hi: "घी" },
+    { en: "Butter", ta: "வெண்ணெய்", hi: "मक्खन" },
+    { en: "Cream", ta: "கிரீம்", hi: "क्रीम" },
+    { en: "Cheese", ta: "சீஸ்", hi: "पनीर (चीज़)" },
+    { en: "Condensed Milk", ta: "கண்டென்ஸ்டு பால்", hi: "कंडेंस्ड मिल्क" },
+  ],
+  "ing-pantry": [
+    { en: "Basmati Rice", ta: "பாஸ்மதி அரிசி", hi: "बासमती चावल" },
+    { en: "Atta (Wheat)", ta: "கோதுமை மாவு", hi: "आटा" },
+    { en: "Besan", ta: "கடலை மாவு", hi: "बेसन" },
+    { en: "Rice Flour", ta: "அரிசி மாவு", hi: "चावल का आटा" },
+    { en: "Maida", ta: "மைதா", hi: "मैदा" },
+    { en: "Oats", ta: "ஓட்ஸ்", hi: "ओट्स" },
+    { en: "Ragi Flour", ta: "கேழ்வரகு மாவு", hi: "रागी आटा" },
+    { en: "Idli/Dosa Batter", ta: "இட்லி/தோசை மாவு", hi: "इडली/डोसा बैटर" },
+    { en: "Poha", ta: "அவல்", hi: "पोहा" },
+    { en: "Cooking Oil", ta: "சமையல் எண்ணெய்", hi: "खाना पकाने का तेल" },
+    { en: "Baking Powder", ta: "பேக்கிங் பவுடர்", hi: "बेकिंग पाउडर" },
+    { en: "Baking Soda", ta: "பேக்கிங் சோடா", hi: "बेकिंग सोडा" },
+    { en: "Yeast", ta: "ஈஸ்ட்", hi: "यीस्ट" },
+    { en: "Salt", ta: "உப்பு", hi: "नमक" },
+  ],
+};
+
+function renderIngredients() {
+  const lang = state.language || "en";
+  for (const [containerId, list] of Object.entries(INGREDIENT_GROUPS)) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = "";
+    list.forEach(itemObj => {
+      const canonical = itemObj.en; // canonical English name is what we store/send to the AI
+      const label = itemObj[lang] || itemObj.en;
+      const active = state.ingredients.has(canonical);
+      const btn = document.createElement("button");
+      btn.className = active
+        ? "px-3 py-1.5 rounded-full bg-primary text-on-primary text-sm shadow-sm flex items-center gap-1"
+        : "px-3 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/50 text-on-surface text-sm hover:border-primary transition-colors";
+      btn.innerHTML = active
+        ? `${label} <span class="material-symbols-outlined text-[14px]">close</span>`
+        : label;
+      btn.onclick = () => {
+        if (state.ingredients.has(canonical)) state.ingredients.delete(canonical);
+        else state.ingredients.add(canonical);
+        renderIngredients();
+      };
+      el.appendChild(btn);
+    });
+  }
+}
+renderIngredients();
+
+// ---------- DISH SEARCH (Google-style suggestions, 350+ real dishes, searchable in any language) ----------
+function translateDishName(name, lang) {
+  if (lang === "en") return name;
+  let result = name;
+  // Replace longer phrases first so multi-word food terms match before single words.
+  const keys = Object.keys(DISH_WORD_MAP).sort((a, b) => b.length - a.length);
+  keys.forEach(word => {
+    const re = new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
+    result = result.replace(re, DISH_WORD_MAP[word][lang] || word);
+  });
+  return result;
+}
+
+function setupDishSearch() {
+  const input = document.getElementById("dishSearch");
+  const box = document.getElementById("dishSuggestions");
+
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      box.classList.add("hidden");
+      box.innerHTML = "";
+      return;
+    }
+    const matches = DISH_LIST.filter((d) => d.toLowerCase().includes(q)).slice(0, 8);
+    if (!matches.length) {
+      box.classList.add("hidden");
+      box.innerHTML = "";
+      return;
+    }
+    const lang = state.language || "en";
+    box.innerHTML = matches
+      .map(
+        (d) =>
+          `<button type="button" class="w-full text-left px-5 py-3 hover:bg-primary-container/10 font-body-md text-body-md text-on-surface border-b border-outline-variant/20 last:border-b-0" data-dish="${d}">${translateDishName(d, lang)}</button>`
+      )
+      .join("");
+    box.classList.remove("hidden");
+  });
+
+  box.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-dish]");
+    if (!btn) return;
+    input.value = btn.textContent;
+    state.dishHint = btn.dataset.dish; // canonical English name sent to the AI
+    box.classList.add("hidden");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!box.contains(e.target) && e.target !== input) {
+      box.classList.add("hidden");
+    }
+  });
+}
+setupDishSearch();
+
+// ---------- SCROLL REVEAL ANIMATIONS ----------
+(function () {
+  const revealEls = document.querySelectorAll(".reveal-on-scroll");
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+  revealEls.forEach((el) => io.observe(el));
+})();
+
+function selectLanguage(lang) {
+  state.language = lang;
+}
+
+function selectMeal(meal) {
+  state.meal = meal;
+  document.querySelectorAll(".meal-chip").forEach(b => {
+    b.classList.remove("bg-primary/10", "border-2", "border-primary", "shadow-sm");
+    b.classList.add("bg-surface-container-lowest", "border", "border-outline-variant/50");
+  });
+  const el = document.querySelector(`.meal-chip[data-meal="${meal}"]`);
+  el.classList.remove("bg-surface-container-lowest", "border", "border-outline-variant/50");
+  el.classList.add("bg-primary/10", "border-2", "border-primary", "shadow-sm");
+}
+
+document.getElementById("cuisineSelect").addEventListener("change", e => {
+  state.cuisine = e.target.value;
+});
+
+// ---------- REVIEW BEFORE GENERATION ----------
+const MEAL_LABELS = { breakfast: "Breakfast", lunch: "Lunch", snacks: "Snacks", dinner: "Dinner" };
+const LANG_LABELS = { en: "English", hi: "Hindi", ta: "Tamil" };
+
+function showReview() {
+  const statusEl = document.getElementById("statusMsg");
+  state.name = document.getElementById("userName").value.trim();
+
+  if (!state.name) {
+    statusEl.textContent = "Please enter your name first.";
+    statusEl.className = "text-center font-body-md text-body-md text-error mt-2";
+    return;
+  }
+  if (state.ingredients.size === 0) {
+    statusEl.textContent = "Please select at least one ingredient.";
+    statusEl.className = "text-center font-body-md text-body-md text-error mt-2";
+    return;
+  }
+
+  statusEl.textContent = "";
+  const box = document.getElementById("reviewSummaryBox");
+  const dishLine = state.dishHint ? `<div><b>Looking for:</b> ${state.dishHint}</div>` : "";
+  box.innerHTML = `
+    <div><b>Name:</b> ${state.name}</div>
+    ${dishLine}
+    <div><b>Language:</b> ${LANG_LABELS[state.language]}</div>
+    <div><b>Meal:</b> ${MEAL_LABELS[state.meal]}</div>
+    <div><b>Cuisine:</b> ${state.cuisine}</div>
+    <div><b>Ingredients:</b> ${Array.from(state.ingredients).join(", ")}</div>
+  `;
+  document.getElementById("reviewModal").classList.remove("hidden");
+}
+
+function closeReview() {
+  document.getElementById("reviewModal").classList.add("hidden");
+}
+
+// ---------- PAYMENT + RECIPE GENERATION ----------
+const API_BASE = "https://cookmate-steel.vercel.app";
+const CASHFREE_MODE = "production";
+const FREE_RECIPE_LIMIT = 2;
+
+function getDeviceId() {
+  let id = localStorage.getItem("cookmate_device_id");
+  if (!id) {
+    id = "dev_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    localStorage.setItem("cookmate_device_id", id);
+  }
+  return id;
+}
+
+async function checkPaywallBeforeGenerate(deviceId) {
+  const res = await fetch(`${API_BASE}/api/check-paywall`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deviceId })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Paywall check failed.");
+  return data;
+}
+
+async function recordRecipeUseAfterSuccess(deviceId) {
+  const res = await fetch(`${API_BASE}/api/record-recipe-use`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ deviceId })
+  });
+  if (!res.ok) console.error("Recipe usage recording failed.");
+}
+
+function savePendingRecipe(deviceId) {
+  const payload = {
+    deviceId,
+    name: state.name,
+    language: state.language,
+    plan: state.plan,
+    meal: state.meal,
+    ingredients: Array.from(state.ingredients),
+    cuisine: state.cuisine,
+    dishHint: state.dishHint || ""
+  };
+  localStorage.setItem("cookmate_pending_recipe", JSON.stringify(payload));
+}
+
+function getPendingRecipe() {
+  try {
+    const raw = localStorage.getItem("cookmate_pending_recipe");
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function clearPendingRecipe() {
+  localStorage.removeItem("cookmate_pending_recipe");
+  localStorage.removeItem("cookmate_pending_order_id");
+}
+
+async function createCashfreeOrder(deviceId) {
+  const res = await fetch(`${API_BASE}/api/create-order`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      deviceId,
+      customerId: "cookmate_" + deviceId,
+      customerPhone: "9999999999"
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    throw new Error(data.error || "Unable to create payment order.");
+  }
+  return data;
+}
+
+async function openCashfreeCheckout(order) {
+  if (typeof Cashfree === "undefined") {
+    throw new Error("Cashfree checkout SDK failed to load. Please refresh and try again.");
+  }
+
+  const cashfree = Cashfree({ mode: CASHFREE_MODE });
+  const result = await cashfree.checkout({
+    paymentSessionId: order.paymentSessionId,
+    redirectTarget: "_self"
+  });
+
+  if (result && result.error) {
+    throw new Error(result.error.message || "Cashfree checkout failed.");
+  }
+}
+
+async function verifyCashfreePayment(orderId) {
+  const res = await fetch(`${API_BASE}/api/verify-payment`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderId })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Unable to verify payment.");
+  return data;
+}
+
+async function generateRecipeAfterAccess(deviceId, paymentId) {
+  const statusEl = document.getElementById("statusMsg");
+  const payBtn = document.getElementById("payBtn");
+
+  payBtn.textContent = "Cooking up your recipe...";
+
+  const res = await fetch(`${API_BASE}/api/generate-recipe`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: state.name,
+      language: state.language,
+      plan: state.plan,
+      meal: state.meal,
+      ingredients: Array.from(state.ingredients),
+      cuisine: state.cuisine,
+      dishHint: state.dishHint || "",
+      paymentId: paymentId || "FREE-" + Date.now(),
+      deviceId
+    })
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok || !data.success || !data.recipe) {
+    throw new Error(data.error || "Recipe generation failed.");
+  }
+
+  if (!paymentId || paymentId.startsWith("FREE-")) {
+    await recordRecipeUseAfterSuccess(deviceId);
+  }
+
+  statusEl.textContent = "";
+  closeReview();
+  renderRecipe(data.recipe);
+}
+
+async function startPayment() {
+  const statusEl = document.getElementById("statusMsg");
+  const payBtn = document.getElementById("payBtn");
+
+  if (payBtn.disabled) return;
+
+  payBtn.disabled = true;
+  statusEl.textContent = "";
+
+  try {
+    const deviceId = getDeviceId();
+    const gate = await checkPaywallBeforeGenerate(deviceId);
+
+    if (gate.allowed) {
+      await generateRecipeAfterAccess(deviceId, "FREE-" + Date.now());
+      return;
+    }
+
+    // Free limit reached: create a real Cashfree Production order.
+    savePendingRecipe(deviceId);
+    payBtn.textContent = "Opening secure payment...";
+
+    const order = await createCashfreeOrder(deviceId);
+    localStorage.setItem("cookmate_pending_order_id", order.orderId);
+
+    await openCashfreeCheckout(order);
+  } catch (err) {
+    console.error("CookMate payment error:", err);
+    statusEl.textContent = err.message || "Payment could not be started. Please try again.";
+    statusEl.className = "text-center font-body-md text-body-md text-error mt-2";
+    payBtn.disabled = false;
+    payBtn.textContent = "Generate My Recipe →";
+  }
+}
+
+async function handleCashfreeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const payment = params.get("payment");
+  const orderId = params.get("order_id");
+
+  if (!orderId || payment !== "success") return;
+
+  const statusEl = document.getElementById("statusMsg");
+  const payBtn = document.getElementById("payBtn");
+  const pending = getPendingRecipe();
+
+  try {
+    payBtn.disabled = true;
+    payBtn.textContent = "Verifying payment...";
+    statusEl.textContent = "Verifying your payment securely...";
+    statusEl.className = "text-center font-body-md text-body-md text-on-surface-variant mt-2";
+
+    const result = await verifyCashfreePayment(orderId);
+
+    if (!result.paid || !result.premium) {
+      throw new Error("Payment was not completed successfully.");
+    }
+
+    if (!pending) {
+      statusEl.textContent = "Payment successful. Premium access is active.";
+      clearPendingRecipe();
+      return;
+    }
+
+    // Restore the recipe request that existed before redirecting to Cashfree.
+    state.deviceId = pending.deviceId || getDeviceId();
+    state.name = pending.name || "";
+    state.language = pending.language || "en";
+    state.plan = pending.plan || "fullday";
+    state.meal = pending.meal || "lunch";
+    state.ingredients = new Set(pending.ingredients || []);
+    state.cuisine = pending.cuisine || "Tamil Nadu";
+    state.dishHint = pending.dishHint || "";
+
+    document.getElementById("userName").value = state.name;
+    document.getElementById("languageSelect").value = state.language;
+    document.getElementById("cuisineSelect").value = state.cuisine;
+    document.getElementById("dishSearch").value = state.dishHint;
+    selectMeal(state.meal);
+    renderIngredients();
+
+    await generateRecipeAfterAccess(state.deviceId, "PAID-" + orderId);
+
+    clearPendingRecipe();
+    history.replaceState({}, document.title, window.location.pathname);
+  } catch (err) {
+    console.error("Cashfree return error:", err);
+    statusEl.textContent = err.message || "Payment verification failed. Please contact support if money was deducted.";
+    statusEl.className = "text-center font-body-md text-body-md text-error mt-2";
+    payBtn.disabled = false;
+    payBtn.textContent = "Generate My Recipe →";
+  }
+}
+
+window.addEventListener("load", () => {
+  handleCashfreeReturn();
+});
+
+// ---------- RECIPE DISPLAY ----------
+let recipeSteps = [];
+
+function renderRecipe(recipe) {
+  document.getElementById("recipePanel").classList.remove("hidden");
+  document.getElementById("recipeName").textContent = recipe.recipeName || "Your Recipe";
+
+  const meta = document.getElementById("recipeMeta");
+  meta.innerHTML = "";
+  const metaItems = [
+    ["schedule", `Prep: ${recipe.preparationTime || "-"}`],
+    ["local_fire_department", `Cook: ${recipe.cookingTime || "-"}`],
+    ["group", `Serves: ${recipe.servings || "-"}`],
+    ["currency_rupee", `Est. Cost: ${recipe.estimatedCost || "-"}`],
+    ["bolt", `Calories: ${recipe.calories || "-"}`]
+  ];
+  metaItems.forEach(([icon, text]) => {
+    const span = document.createElement("span");
+    span.className = "flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-low";
+    span.innerHTML = `<span class="material-symbols-outlined text-[16px] text-primary">${icon}</span> ${text}`;
+    meta.appendChild(span);
+  });
+
+  const ingList = document.getElementById("recipeIngredients");
+  ingList.innerHTML = "";
+  (recipe.ingredients || []).forEach(ing => {
+    const li = document.createElement("li");
+    li.textContent = `${ing.name} — ${ing.quantity}`;
+    ingList.appendChild(li);
+  });
+
+  const stepsList = document.getElementById("recipeSteps");
+  stepsList.innerHTML = "";
+  recipeSteps = recipe.instructions || [];
+  recipeSteps.forEach(step => {
+    const li = document.createElement("li");
+    li.textContent = step;
+    stepsList.appendChild(li);
+  });
+
+  const extras = document.getElementById("recipeExtras");
+  extras.innerHTML = "";
+  const extraItems = [
+    ["Storage Tips", recipe.storageTips],
+    ["Reheating", recipe.reheatingInstructions],
+    ["Ingredient Alternatives", recipe.ingredientAlternatives],
+    ["Cooking Tips", recipe.cookingTips],
+    ["Common Mistakes", recipe.commonMistakes]
+  ];
+  extraItems.forEach(([label, text]) => {
+    if (!text) return;
+    const div = document.createElement("div");
+    div.className = "p-4 rounded-xl bg-surface-container-low";
+    div.innerHTML = `<b class="text-primary">${label}:</b> ${text}`;
+    extras.appendChild(div);
+  });
+
+  document.getElementById("recipePanel").scrollIntoView({ behavior: "smooth" });
+}
+
+// ---------- AUDIO ASSISTANT ----------
+let currentStepIndex = 0;
+let currentUtterance = null;
+let speechRate = 1;
+
+const LANG_CODES = { en: "en-IN", hi: "hi-IN", ta: "ta-IN" };
+
+function speakStep(index) {
+  if (!recipeSteps.length) return;
+  window.speechSynthesis.cancel();
+  currentStepIndex = Math.max(0, Math.min(index, recipeSteps.length - 1));
+  const text = `Step ${currentStepIndex + 1}. ${recipeSteps[currentStepIndex]}`;
+  document.getElementById("currentStepText").textContent = text;
+
+  currentUtterance = new SpeechSynthesisUtterance(text);
+  currentUtterance.lang = LANG_CODES[state.language] || "en-IN";
+  currentUtterance.rate = speechRate;
+  currentUtterance.onend = () => {
+    if (currentStepIndex < recipeSteps.length - 1) {
+      speakStep(currentStepIndex + 1);
+    }
+  };
+  window.speechSynthesis.speak(currentUtterance);
+}
+
+function audioPlay() { speakStep(currentStepIndex); }
+function audioPause() { window.speechSynthesis.pause(); }
+function audioPrev() { speakStep(currentStepIndex - 1); }
+function audioNext() { speakStep(currentStepIndex + 1); }
+function audioRepeat() { speakStep(currentStepIndex); }
+function setSpeed(val) { speechRate = parseFloat(val); }
+</script>
+
+</body></html>
